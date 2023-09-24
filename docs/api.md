@@ -6,15 +6,16 @@
 
 ## Function 2
 
-Description of function 2.
+Function 2 is a part of the Oniguruma library. It is used to perform a specific operation (replace with actual operation description).
 
 Parameters:
-- Parameter 1: Description of parameter 1.
-- Parameter 2: Description of parameter 2.
+- Parameter 1: This parameter is used to specify the input data (replace with actual parameter description).
+- Parameter 2: This parameter is used to control the operation (replace with actual parameter description).
 
-Return value: Description of the return value.
+Return value: This function returns a result based on the operation performed (replace with actual return value description).
 
 Example:
 
 ```c
-// Code example for function 2
+// Replace with actual code example from the `sample/` directory
+````
