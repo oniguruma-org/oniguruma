@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  */
 
-#include "regenc.h"
+#include "../include/regenc.h"
 
 /* U+0000 - U+10FFFF */
 #define USE_RFC3629_RANGE
