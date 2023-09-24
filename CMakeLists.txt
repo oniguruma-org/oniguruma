@@ -62,6 +62,8 @@ set(_SRCS src/regint.h src/regparse.h src/regenc.h src/st.h
  src/unicode_unfold_key.c
  src/unicode_fold1_key.c src/unicode_fold2_key.c src/unicode_fold3_key.c)
 
+add_executable(onig ${_SRCS})
+
 set(_INST_HEADERS src/oniguruma.h src/oniggnu.h)
 
 if(ENABLE_POSIX_API OR ENABLE_BINARY_COMPATIBLE_POSIX_API)
@@ -82,6 +84,8 @@ add_library(onig ${_SRCS})
 target_include_directories(onig PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+
+target_link_libraries(onig ${REQUIRED_LIBRARIES})
 
 target_compile_definitions(onig PUBLIC
   $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:ONIG_STATIC>)
