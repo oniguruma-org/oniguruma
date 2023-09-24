@@ -1,6 +1,8 @@
 Oniguruma API  Version 6.9.9  2022/10/28
 
+```c
 #include <oniguruma.h>
+```
 
 
 # int onig_initialize(OnigEncoding use_encodings[], int num_encodings)
@@ -1099,5 +1101,3 @@ Oniguruma API  Version 6.9.9  2022/10/28
 # const char* onig_version(void)
 
   Return version string.  (ex. "5.0.3")
-
-// END

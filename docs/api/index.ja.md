@@ -1,6 +1,8 @@
 鬼車インターフェース Version 6.9.9   2022/11/16
 
+```c
 #include <oniguruma.h>
+```
 
 
 # int onig_initialize(OnigEncoding use_encodings[], int num_encodings)
