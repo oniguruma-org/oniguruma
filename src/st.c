@@ -451,16 +451,18 @@ st_cleanup_safe(st_table* table, st_data_t never)
 {
   int num_entries = table->num_entries;
 
-  st_foreach(table, delete_never, never);
+  st_foreach(table, (int(*)(void))delete_never, never);
   table->num_entries = num_entries;
 }
 
 extern int
-st_foreach(st_table* table, int (*func)(st_data_t, st_data_t, st_data_t), st_data_t arg)
+st_foreach(st_table* table, int (*func1)(ANYARGS), st_data_t arg)
 {
   st_table_entry *ptr, *last, *tmp;
   enum st_retval retval;
   int i;
+
+  int(*func)(st_data_t, st_data_t, st_data_t) = (int(*)(st_data_t, st_data_t, st_data_t))func1;
 
   for(i = 0; i < table->num_bins; i++) {
     last = 0;

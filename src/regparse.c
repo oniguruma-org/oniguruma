@@ -808,7 +808,7 @@ names_clear(regex_t* reg)
   NameTable* t = (NameTable* )reg->name_table;
 
   if (IS_NOT_NULL(t)) {
-    onig_st_foreach(t, i_free_name_entry, 0);
+    onig_st_foreach(t, (int(*)(void))i_free_name_entry, 0);
   }
   return 0;
 }
@@ -877,7 +877,7 @@ onig_foreach_name(regex_t* reg,
     narg.reg  = reg;
     narg.arg  = arg;
     narg.enc  = reg->enc; /* should be pattern encoding. */
-    onig_st_foreach(t, i_names, (HashDataType )&narg);
+    onig_st_foreach(t, (int(*)(void))i_names, (HashDataType )&narg);
   }
   return narg.ret;
 }
@@ -905,7 +905,7 @@ onig_renumber_name_table(regex_t* reg, GroupNumMap* map)
   NameTable* t = (NameTable* )reg->name_table;
 
   if (IS_NOT_NULL(t)) {
-    onig_st_foreach(t, i_renumber_name, (HashDataType )map);
+    onig_st_foreach(t, (int(*)(void))i_renumber_name, (HashDataType )map);
   }
   return 0;
 }
@@ -1390,7 +1390,7 @@ static int
 callout_name_table_clear(CalloutNameTable* t)
 {
   if (IS_NOT_NULL(t)) {
-    onig_st_foreach(t, i_free_callout_name_entry, 0);
+    onig_st_foreach(t, (int(*)(void))i_free_callout_name_entry, 0);
   }
   return 0;
 }
@@ -1888,7 +1888,7 @@ setup_ext_callout_list_values(regex_t* reg)
 
   ext = reg->extp;
   if (IS_NOT_NULL(ext->tag_table)) {
-    onig_st_foreach((CalloutTagTable *)ext->tag_table, i_callout_callout_list_set,
+    onig_st_foreach((CalloutTagTable *)ext->tag_table, (int(*)(void))i_callout_callout_list_set,
                     (st_data_t )ext);
   }
 
@@ -1936,7 +1936,7 @@ static int
 callout_tag_table_clear(CalloutTagTable* t)
 {
   if (IS_NOT_NULL(t)) {
-    onig_st_foreach(t, i_free_callout_tag_entry, 0);
+    onig_st_foreach(t, (int(*)(void))i_free_callout_tag_entry, 0);
   }
   return 0;
 }
