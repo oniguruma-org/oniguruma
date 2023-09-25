@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  */
 
-#include "../include/regint.h"   /* for USE_CALLOUT */
+#include "regint.h"   /* for USE_CALLOUT */
 
 static int
 init(void)
