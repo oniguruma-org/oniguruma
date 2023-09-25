@@ -1,0 +1,34 @@
+name: cmake --build
+on:
+  push:
+    branches: "main"
+    paths-ignore:
+      - .gitignore
+      - LICENSE
+      - README.*
+      - docs/**
+      - .github/**
+      - "!.github/workflows/cmake-build.yml"
+  pull_request:
+    paths-ignore:
+      - .gitignore
+      - LICENSE
+      - README.*
+      - docs/**
+      - .github/**
+      - "!.github/workflows/cmake-build.yml"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  cmake-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: curl -fsSL https://webi.sh/cmake | sh
+      - run: cmake -Bbuild
+      - run: cmake --build build
