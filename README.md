@@ -1,194 +1,148 @@
-[![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/oniguruma.svg)](https://oss-fuzz-build-logs.storage.googleapis.com/index.html#oniguruma)
+# libonig # {#mainpage}
 
-# Oniguruma
+🔠 The regular expression library that powers Ruby & PHP
 
-## **Since 2020, Oniguruma has been under attack on Google search in Japan.** [(Issue #234)](https://github.com/kkos/oniguruma/issues/234)
+<p align=center>
 
-https://github.com/kkos/oniguruma
+</p>
 
-Oniguruma is a modern and flexible regular expressions library. It encompasses
-features from different regular expression implementations that traditionally
-exist in different languages.
+<!-- prettier-ignore -->
+💎 Used as the regex engine in [Ruby] 2<br>
+🐘 Used as the regex engine in [PHP] 5<br>
+😎 Written in everyone's favorite C language<br>
+🍰 Uses standard [CMake] for the build system<br>
+🐸 Installable via [Conan] dependency manager<br>
+📦 Installable via [Vcpkg] package manager
 
-Character encoding can be specified per regular expression object.
+## Installation
 
-Supported character encodings:
+You can install this library using [Conan] or [Vcpkg] like this:
 
-ASCII, UTF-8, UTF-16BE, UTF-16LE, UTF-32BE, UTF-32LE, EUC-JP, EUC-TW, EUC-KR,
-EUC-CN, Shift_JIS, Big5, GB18030, KOI8-R, CP1251, ISO-8859-1, ISO-8859-2,
-ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-7, ISO-8859-8,
-ISO-8859-9, ISO-8859-10, ISO-8859-11, ISO-8859-13, ISO-8859-14, ISO-8859-15,
-ISO-8859-16
+```sh
+# conanfile.txt
+[requires]
+oniguruma/6.9.8
+```
 
-- GB18030: contributed by KUBO Takehiro
-- CP1251: contributed by Byte
-- doc/SYNTAX.md: contributed by seanofw
+```sh
+vcpkg install oniguruma
+```
 
-## Notice (from 6.9.6)
+ℹ The `oniguruma` Vcpkg port in is maintained by Microsoft community
+contributors. If any issues arise specific to Vcpkg, please direct them to [the
+microsoft/vcpkg project].
 
-When using configure script, if you have the POSIX API enabled in an earlier
-version (disabled by default in 6.9.5) and you need application binary
-compatibility with the POSIX API, specify
-"--enable-binary-compatible-posix-api=yes" instead of "--enable-posix-api=yes".
-Starting in 6.9.6, "--enable-posix-api=yes" only supports source-level
-compatibility for 6.9.5 and earlier about POSIX API. (Issue #210)
+<details><summary>This library is also available through a number of system package managers</summary>
 
-## Master branch
+| OS            | Install command               |
+| ------------- | ----------------------------- |
+| Fedora        | `dnf install oniguruma-devel` |
+| RHEL/CentOS   | `yum install oniguruma`       |
+| Debian/Ubuntu | `apt install libonig5`        |
+| Arch          | `pacman -S oniguruma`         |
+| openSUSE      | `zypper install oniguruma`    |
 
-- Update Unicode version 15.1.0
-- NEW API: ONIG_OPTION_MATCH_WHOLE_STRING
-- Fixed: (?I) option was not enabled for character classes (Issue #264).
-- Changed specification to check for incorrect POSIX bracket (Issue #253).
-- Changed [[:punct:]] in Unicode encodings to be compatible with POSIX
-  definition. (Issue #268)
-- Fixed: ONIG_OPTION_FIND_LONGEST behavior
+</details>
 
-## Version 6.9.8
+<details><summary>Manual build instructions for users</summary>
 
-- Update Unicode version 14.0.0
-- Whole options
-  - (?C) : ONIG_OPTION_DONT_CAPTURE_GROUP
-  - (?I) : ONIG_OPTION_IGNORECASE_IS_ASCII
-  - (?L) : ONIG_OPTION_FIND_LONGEST
-- Fixed some problems found by OSS-Fuzz
+```sh
+cmake -Bbuild
+cmake --build build
+cp -r include build/lib* /workspaces/awesome-project/
+```
 
-## Version 6.9.7
+💻 These steps work on Windows, macOS, and Linux. Make sure you have a good
+version of [CMake] installed. You can [download CMake] from [CMake.org] or via
+[webinstall.dev/cmake].
 
-- NEW API: ONIG_OPTION_CALLBACK_EACH_MATCH
-- NEW API: ONIG_OPTION_IGNORECASE_IS_ASCII
-- NEW API: ONIG_SYNTAX_PYTHON
-- Fixed some problems found by OSS-Fuzz
-
-## Version 6.9.6
-
-- NEW: configure option --enable-binary-compatible-posix-api=[yes/no]
-- NEW API: Limiting the maximum number of calls of subexp-call
-- NEW API: ONIG_OPTION_NOT_BEGIN_STRING / NOT_END_STRING / NOT_BEGIN_POSITION
-- Fixed behavior of ONIG_OPTION_NOTBOL / NOTEOL
-- Fixed many problems found by OSS-Fuzz
-- Fixed many problems found by Coverity
-- Fixed CVE-2020-26159 (This turned out not to be a problem later. #221)
-- Under cygwin and mingw, generate and install the libonig.def file (Issue #220)
-
-## Version 6.9.5 revised 1
-
-- Fixed Issue #192
-
-## Version 6.9.5
-
-- POSIX API disabled by default for Unix (\* Enabled by: configure
-  --enable-posix-api=yes)
-- Update Unicode version 13.0.0
-- NEW: Code point sequence notation \x{HHHH HHHH ...}, \o{OOOO OOOO ...}
-- NEW API: retry limit in search functions
-- NEW API: maximum nesting level of subexp call
-- Fixed behavior of isolated options in Perl and Java syntaxes. /...(?i).../
-
-## License
-
-BSD license.
-
-## Install
-
-### Case 1: Linux distribution packages
-
-- Fedora: `dnf install oniguruma-devel`
-- RHEL/CentOS: `yum install oniguruma`
-- Debian/Ubuntu: `apt install libonig5`
-- Arch: `pacman -S oniguruma`
-- openSUSE: `zypper install oniguruma`
-
-### Case 2: Manual compilation on Linux, Unix, and Cygwin platform
-
-1.  autoreconf -vfi (\* case: configure script is not found.)
-
-2.  ./configure
-3.  make
-4.  make install
-
-- uninstall
-
-  make uninstall
-
-- configuration check
-
-  onig-config --cflags onig-config --libs onig-config --prefix onig-config
-  --exec-prefix
-
-### Case 3: Windows 64/32bit platform (Visual Studio)
-
-- build library
-
-  .\make_win.bat
-
-  onig_s.lib: static link library onig.dll: dynamic link library
-
-- make test programs
-
-  .\make_win.bat all-test
-
-Alternatively, you can build and install oniguruma using
-[vcpkg](https://github.com/microsoft/vcpkg/) dependency manager:
-
-1.  git clone https://github.com/Microsoft/vcpkg.git
-2.  cd vcpkg
-3.  ./bootstrap-vcpkg.bat
-4.  ./vcpkg integrate install
-5.  ./vcpkg install oniguruma
-
-The oniguruma port in vcpkg is kept up to date by microsoft team members and
-community contributors. If the version is out of date, please
-[create an issue or pull request](https://github.com/Microsoft/vcpkg) on the
-vcpkg repository.
-
-## Regular Expressions
-
-See [doc/RE](doc/RE) or [doc/RE.ja](doc/RE.ja) for Japanese.
+</details>
 
 ## Usage
 
-Include oniguruma.h in your program. (Oniguruma API) See doc/API for Oniguruma
-API.
+After installing, you can get started with a simple program like this. It prints
+out whether or not the example `text` matches the `regex` variable.
 
-If you want to disable UChar type (== unsigned char) definition in oniguruma.h,
-define ONIG_ESCAPE_UCHAR_COLLISION and then include oniguruma.h.
+```c
+#include <stdio.h>
+#include <oniguruma.h>
 
-If you want to disable regex_t type definition in oniguruma.h, define
-ONIG_ESCAPE_REGEX_T_COLLISION and then include oniguruma.h.
+int main() {
+    OnigEncoding enc;
+    OnigRegex regex;
+    OnigPosition start, end;
+    OnigRegion* region;
+    UChar* pattern = (UChar*) "hello";
+    UChar* str = (UChar*) "Hello world!";
+    int r;
 
-Example of the compiling/linking command line in Unix or Cygwin, (prefix ==
-/usr/local case)
+    r = onig_initialize(&enc, ONIG_ENCODING_UTF8, ONIG_ENCODING_UTF8);
+    if (r != ONIG_NORMAL) {
+        printf("Error: onig_initialize\n");
+        return 1;
+    }
 
-    cc sample.c -L/usr/local/lib -lonig
+    r = onig_new(&regex, pattern, pattern + strlen((char*)pattern),
+                 ONIG_OPTION_IGNORECASE, enc, ONIG_SYNTAX_DEFAULT, NULL);
+    if (r != ONIG_NORMAL) {
+        printf("Error: onig_new\n");
+        onig_end();
+        return 1;
+    }
 
-If you want to use static link library(onig_s.lib) in Win32, add option
--DONIG_EXTERN=extern to C compiler.
+    region = onig_region_new();
 
-## Sample Programs
+    r = onig_search(regex, str, str + strlen((char*)str),
+                    str, str + strlen((char*)str), region, ONIG_OPTION_NONE);
+    if (r >= 0) {
+        printf("Match found!\n");
+    } else if (r == ONIG_MISMATCH) {
+        printf("No match found.\n");
+    } else {
+        printf("Error: onig_search (return code %d)\n", r);
+    }
 
-| File                   | Description                              |
-| :--------------------- | :--------------------------------------- |
-| sample/callout.c       | example of callouts                      |
-| sample/count.c         | example of built-in callout \*COUNT      |
-| sample/echo.c          | example of user defined callouts of name |
-| sample/encode.c        | example of some encodings                |
-| sample/listcap.c       | example of the capture history           |
-| sample/names.c         | example of the named group callback      |
-| sample/posix.c         | POSIX API sample                         |
-| sample/regset.c        | example of using RegSet API              |
-| sample/scan.c          | example of using onig_scan()             |
-| sample/simple.c        | example of the minimum (Oniguruma API)   |
-| sample/sql.c           | example of the variable meta characters  |
-| sample/user_property.c | example of user defined Unicode property |
+    onig_region_free(region, 1);
+    onig_free(regex);
+    onig_end();
 
-Test Programs
+    return 0;
+}
+```
 
-| File            | Description                           |
-| :-------------- | :------------------------------------ |
-| sample/syntax.c | Perl, Java and ASIS syntax test.      |
-| sample/crnl.c   | --enable-crnl-as-line-terminator test |
+If you're interested in seeing some more examples, check out the [Examples page]
+on the [documentation website]!
 
-## Source Files
+## Development
+
+This project uses CMake as its build system. The source `*.c` files are all in
+`src/`. Any public header files that users of the library could
+`#include <lib.h>` are in the `include/` folder. This library offers two main
+targets: a shared library (usually `libonig.so`) and a static library (usually
+`libonig.a`). These targets are named `libonig-shared` and `libonig-static` if
+you want to build them individually via `cmake --build build --target <target>`.
+
+To get started, run these commands after cloning this repository:
+
+```sh
+cmake -Bbuild
+cmake --build build
+```
+
+The `-Bbuild` flag tells CMake to put the generated build tree (`Makefile`, `.o`
+files, etc.) into a parallel `build/` folder instead of the current directory.
+We then use the `--build` flag to run the Ninja, Make, VS project, or other
+build system commands in the `build/` folder that was just generated. After the
+initial generation you don't need to rerun the `cmake -Bbuild` command since the
+build tooling will already be there. Instead just run `cmake --build build`.
+
+There's also a `test` target that can used to build and run the tests. There's
+not currently a test runner that we use, so we roll our own. To run the tests,
+use this:
+
+```sh
+cmake --build build --target test
+```
 
 | File                | Description                                              |
 | :------------------ | :------------------------------------------------------- |
@@ -247,3 +201,12 @@ Test Programs
 | unicode.c           | common codes of Unicode encoding                         |
 | unicode_fold_data.c | Unicode folding data                                     |
 | windows/testc.c     | Test program for Windows (VC++)                          |
+
+[conan]: https://conan.io/
+[vcpkg]: https://vcpkg.io/
+[php]: https://www.php.net/
+[ruby]: https://www.ruby-lang.org/
+[cmake]: https://cmake.org/
+[download cmake]: https://cmake.org/download/
+[cmake.org]: https://cmake.org/
+[webinstall.dev/cmake]: https://webinstall.dev/cmake
