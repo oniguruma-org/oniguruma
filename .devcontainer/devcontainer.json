@@ -1,0 +1,4 @@
+// TODO: Improve this
+{
+  "updateContentCommand": "bash .devcontainer/updateContentCommand.sh"
+}
