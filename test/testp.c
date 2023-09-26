@@ -7,17 +7,15 @@
 
 #include "onigposix.h"
 
-#define SLEN(s)  strlen(s)
+#define SLEN(s) strlen(s)
 
-static int nsucc  = 0;
-static int nfail  = 0;
+static int nsucc = 0;
+static int nfail = 0;
 static int nerror = 0;
 
-static FILE* err_file;
+static FILE *err_file;
 
-static void
-xx(char* pattern, char* str, int from, int to, int mem, int not)
-{
+static void xx(char *pattern, char *str, int from, int to, int mem, int not ) {
   int r;
   regex_t reg;
   char buf[200];
@@ -28,7 +26,7 @@ xx(char* pattern, char* str, int from, int to, int mem, int not)
     regerror(r, &reg, buf, sizeof(buf));
     fprintf(err_file, "ERROR: %s\n", buf);
     nerror++;
-    return ;
+    return;
   }
 
   r = regexec(&reg, str, reg.re_nsub + 1, pmatch, 0);
@@ -36,32 +34,28 @@ xx(char* pattern, char* str, int from, int to, int mem, int not)
     regerror(r, &reg, buf, sizeof(buf));
     fprintf(err_file, "ERROR: %s\n", buf);
     nerror++;
-    return ;
+    return;
   }
 
   if (r == REG_NOMATCH) {
-    if (not) {
+    if (not ) {
       fprintf(stdout, "OK(N): /%s/ '%s'\n", pattern, str);
       nsucc++;
-    }
-    else {
+    } else {
       fprintf(stdout, "FAIL: /%s/ '%s'\n", pattern, str);
       nfail++;
     }
-  }
-  else {
-    if (not) {
+  } else {
+    if (not ) {
       fprintf(stdout, "FAIL(N): /%s/ '%s'\n", pattern, str);
       nfail++;
-    }
-    else {
+    } else {
       if (pmatch[mem].rm_so == from && pmatch[mem].rm_eo == to) {
         fprintf(stdout, "OK: /%s/ '%s'\n", pattern, str);
         nsucc++;
-      }
-      else {
-        fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d\n", pattern, str,
-                from, to, pmatch[mem].rm_so, pmatch[mem].rm_eo);
+      } else {
+        fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d\n", pattern, str, from,
+                to, pmatch[mem].rm_so, pmatch[mem].rm_eo);
         nfail++;
       }
     }
@@ -69,23 +63,17 @@ xx(char* pattern, char* str, int from, int to, int mem, int not)
   regfree(&reg);
 }
 
-static void x2(char* pattern, char* str, int from, int to)
-{
+static void x2(char *pattern, char *str, int from, int to) {
   xx(pattern, str, from, to, 0, 0);
 }
 
-static void x3(char* pattern, char* str, int from, int to, int mem)
-{
+static void x3(char *pattern, char *str, int from, int to, int mem) {
   xx(pattern, str, from, to, mem, 0);
 }
 
-static void n(char* pattern, char* str)
-{
-  xx(pattern, str, 0, 0, 0, 1);
-}
+static void n(char *pattern, char *str) { xx(pattern, str, 0, 0, 0, 1); }
 
-extern int main(int argc, char* argv[])
-{
+extern int main(int argc, char *argv[]) {
   err_file = stdout;
 
   reg_set_encoding(REG_POSIX_ENCODING_UTF8);
@@ -107,7 +95,8 @@ extern int main(int argc, char* argv[])
   x2("\\x61", "a", 0, 1);
   x2("aa", "aa", 0, 2);
   x2("aaa", "aaa", 0, 3);
-  x2("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0, 35);
+  x2("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0, 35);
   x2("ab", "ab", 0, 2);
   x2("b", "ab", 1, 2);
   x2("bc", "abc", 1, 3);
@@ -163,7 +152,8 @@ extern int main(int argc, char* argv[])
   x2("[\\x5a-\\x5c]", "\x5b", 0, 1);
   x2("[\\x6A-\\x6D]", "\x6c", 0, 1);
   n("[\\x6A-\\x6D]", "\x6E");
-  n("^[0-9A-F]+ 0+ UNDEF ", "75F 00000000 SECT14A notype ()    External    | _rb_apply");
+  n("^[0-9A-F]+ 0+ UNDEF ",
+    "75F 00000000 SECT14A notype ()    External    | _rb_apply");
   x2("[\\[]", "[", 0, 1);
   x2("[\\]]", "]", 0, 1);
   x2("[&]", "&", 0, 1);
@@ -478,16 +468,29 @@ extern int main(int argc, char* argv[])
   x2("(?:(?<x>)|(?<x>efg))\\k<x>", "", 0, 0);
   x2("(?:(?<x>abc)|(?<x>efg))\\k<x>", "abcefgefg", 3, 9);
   n("(?:(?<x>abc)|(?<x>efg))\\k<x>", "abcefg");
-  x2("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|(?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>...........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............))\\k<n1>$", "a-pyumpyum", 2, 10);
-  x3("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|(?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>...........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............))\\k<n1>$", "xxxxabcdefghijklmnabcdefghijklmn", 4, 18, 14);
-  x3("(?<name1>)(?<name2>)(?<name3>)(?<name4>)(?<name5>)(?<name6>)(?<name7>)(?<name8>)(?<name9>)(?<name10>)(?<name11>)(?<name12>)(?<name13>)(?<name14>)(?<name15>)(?<name16>aaa)(?<name17>)$", "aaa", 0, 3, 16);
+  x2("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|("
+     "?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>.."
+     ".........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............)"
+     ")\\k<n1>$",
+     "a-pyumpyum", 2, 10);
+  x3("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|("
+     "?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>.."
+     ".........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............)"
+     ")\\k<n1>$",
+     "xxxxabcdefghijklmnabcdefghijklmn", 4, 18, 14);
+  x3("(?<name1>)(?<name2>)(?<name3>)(?<name4>)(?<name5>)(?<name6>)(?<name7>)(?<"
+     "name8>)(?<name9>)(?<name10>)(?<name11>)(?<name12>)(?<name13>)(?<name14>)("
+     "?<name15>)(?<name16>aaa)(?<name17>)$",
+     "aaa", 0, 3, 16);
   x2("(?<foo>a|\\(\\g<foo>\\))", "a", 0, 1);
   x2("(?<foo>a|\\(\\g<foo>\\))", "((((((a))))))", 0, 13);
   x3("(?<foo>a|\\(\\g<foo>\\))", "((((((((a))))))))", 0, 17, 1);
   x2("\\g<bar>|\\zEND(?<bar>.*abc$)", "abcxxxabc", 0, 9);
   x2("\\g<1>|\\zEND(.a.)", "bac", 0, 3);
   x3("\\g<_A>\\g<_A>|\\zEND(.a.)(?<_A>.b.)", "xbxyby", 3, 6, 1);
-  x2("\\A(?:\\g<pon>|\\g<pan>|\\zEND  (?<pan>a|c\\g<pon>c)(?<pon>b|d\\g<pan>d))$", "cdcbcdc", 0, 7);
+  x2("\\A(?:\\g<pon>|\\g<pan>|\\zEND  "
+     "(?<pan>a|c\\g<pon>c)(?<pon>b|d\\g<pan>d))$",
+     "cdcbcdc", 0, 7);
   x2("\\A(?<n>|a\\g<m>)\\z|\\zEND (?<m>\\g<n>)", "aaaa", 0, 4);
   x2("(?<n>(a|b\\g<n>c){3,5})", "baaaaca", 1, 5);
   x2("(?<n>(a|b\\g<n>c){3,5})", "baaaacaaaaa", 0, 10);
@@ -499,12 +502,14 @@ extern int main(int argc, char* argv[])
   x2("x((.)*)*x(?i:\\1)\\Z", "0x1x2x1X2", 1, 9);
   x2("(?:()|()|()|()|()|())*\\2\\5", "", 0, 0);
   x2("(?:()|()|()|(x)|()|())*\\2b\\5", "b", 0, 1);
-  x2("[0-9-a]", "-", 0, 1);   // PR#44
-  n("[0-9-a]", ":");          // PR#44
+  x2("[0-9-a]", "-", 0, 1);                                // PR#44
+  n("[0-9-a]", ":");                                       // PR#44
   x3("(\\(((?:[^(]|\\g<1>)*)\\))", "(abc)(abc)", 1, 4, 2); // PR#43
   x2("\\o{101}", "A", 0, 1);
-  x2("(?:\\k'+1'B|(A)C)*", "ACAB", 0, 4); // relative backref by postitive number
-  x2("\\g<+2>(abc)(ABC){0}", "ABCabc", 0, 6); // relative call by positive number
+  x2("(?:\\k'+1'B|(A)C)*", "ACAB", 0,
+     4); // relative backref by postitive number
+  x2("\\g<+2>(abc)(ABC){0}", "ABCabc", 0,
+     6); // relative call by positive number
   x2("A\\g'0'|B()", "AAAAB", 0, 5);
   x3("(A\\g'0')|B", "AAAAB", 0, 5, 1);
   x2("(a*)(?(1))aa", "aaaaa", 0, 5);
@@ -605,9 +610,10 @@ extern int main(int argc, char* argv[])
   x2("^\\X$", "\x0d\x0a", 0, 2);
   x2("^\\X\\X\\X$", "ab\x0d\x0a", 0, 4);
 
-  fprintf(stdout,
-       "\nRESULT   SUCC: %4d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
-       nsucc, nfail, nerror, onig_version());
+  fprintf(
+      stdout,
+      "\nRESULT   SUCC: %4d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
+      nsucc, nfail, nerror, onig_version());
 
   return ((nfail == 0 && nerror == 0) ? 0 : -1);
 }

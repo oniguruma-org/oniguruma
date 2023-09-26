@@ -30,9 +30,7 @@
 #include "regint.h"
 
 /* onig_init(): deprecated function */
-extern int
-onig_init(void)
-{
+extern int onig_init(void) {
 #if 0
   OnigEncoding encs[] = {
     ONIG_ENCODING_UTF8

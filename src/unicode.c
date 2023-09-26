@@ -34,53 +34,49 @@ struct PoolPropertyNameCtype {
   short int ctype;
 };
 
-#define ONIGENC_IS_UNICODE_ISO_8859_1_CTYPE(code,ctype) \
+#define ONIGENC_IS_UNICODE_ISO_8859_1_CTYPE(code, ctype)                       \
   ((EncUNICODE_ISO_8859_1_CtypeTable[code] & CTYPE_TO_BIT(ctype)) != 0)
 
 static const unsigned short EncUNICODE_ISO_8859_1_CtypeTable[256] = {
-  0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008,
-  0x4008, 0x428c, 0x4289, 0x4288, 0x4288, 0x4288, 0x4008, 0x4008,
-  0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008,
-  0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008,
-  0x4284, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0,
-  0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0,
-  0x78b0, 0x78b0, 0x78b0, 0x78b0, 0x78b0, 0x78b0, 0x78b0, 0x78b0,
-  0x78b0, 0x78b0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0,
-  0x41a0, 0x7ca2, 0x7ca2, 0x7ca2, 0x7ca2, 0x7ca2, 0x7ca2, 0x74a2,
-  0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2,
-  0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2,
-  0x74a2, 0x74a2, 0x74a2, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x51a0,
-  0x41a0, 0x78e2, 0x78e2, 0x78e2, 0x78e2, 0x78e2, 0x78e2, 0x70e2,
-  0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2,
-  0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2,
-  0x70e2, 0x70e2, 0x70e2, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x4008,
-  0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0288, 0x0008, 0x0008,
-  0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008,
-  0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008,
-  0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008,
-  0x0284, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x01a0,
-  0x01a0, 0x01a0, 0x30e2, 0x01a0, 0x01a0, 0x00a8, 0x01a0, 0x01a0,
-  0x01a0, 0x01a0, 0x10a0, 0x10a0, 0x01a0, 0x30e2, 0x01a0, 0x01a0,
-  0x01a0, 0x10a0, 0x30e2, 0x01a0, 0x10a0, 0x10a0, 0x10a0, 0x01a0,
-  0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2,
-  0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2,
-  0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x01a0,
-  0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x30e2,
-  0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2,
-  0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2,
-  0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x01a0,
-  0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2
-};
+    0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008,
+    0x428c, 0x4289, 0x4288, 0x4288, 0x4288, 0x4008, 0x4008, 0x4008, 0x4008,
+    0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4008,
+    0x4008, 0x4008, 0x4008, 0x4008, 0x4008, 0x4284, 0x41a0, 0x41a0, 0x41a0,
+    0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0,
+    0x41a0, 0x41a0, 0x41a0, 0x78b0, 0x78b0, 0x78b0, 0x78b0, 0x78b0, 0x78b0,
+    0x78b0, 0x78b0, 0x78b0, 0x78b0, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x41a0,
+    0x41a0, 0x41a0, 0x7ca2, 0x7ca2, 0x7ca2, 0x7ca2, 0x7ca2, 0x7ca2, 0x74a2,
+    0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2,
+    0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2, 0x74a2,
+    0x74a2, 0x41a0, 0x41a0, 0x41a0, 0x41a0, 0x51a0, 0x41a0, 0x78e2, 0x78e2,
+    0x78e2, 0x78e2, 0x78e2, 0x78e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2,
+    0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2,
+    0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x70e2, 0x41a0, 0x41a0, 0x41a0,
+    0x41a0, 0x4008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0288, 0x0008,
+    0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008,
+    0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008,
+    0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0284, 0x01a0,
+    0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x30e2,
+    0x01a0, 0x01a0, 0x00a8, 0x01a0, 0x01a0, 0x01a0, 0x01a0, 0x10a0, 0x10a0,
+    0x01a0, 0x30e2, 0x01a0, 0x01a0, 0x01a0, 0x10a0, 0x30e2, 0x01a0, 0x10a0,
+    0x10a0, 0x10a0, 0x01a0, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2,
+    0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2,
+    0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x01a0,
+    0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x34a2, 0x30e2, 0x30e2,
+    0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2,
+    0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x30e2,
+    0x30e2, 0x30e2, 0x30e2, 0x30e2, 0x01a0, 0x30e2, 0x30e2, 0x30e2, 0x30e2,
+    0x30e2, 0x30e2, 0x30e2, 0x30e2};
 
 #include "st.h"
 
 #include "unicode_fold_data.c"
 
-extern int
-onigenc_unicode_mbc_case_fold(OnigEncoding enc, OnigCaseFoldType flag,
-    const UChar** pp, const UChar* end, UChar* fold)
-{
-  const struct ByUnfoldKey* buk;
+extern int onigenc_unicode_mbc_case_fold(OnigEncoding enc,
+                                         OnigCaseFoldType flag,
+                                         const UChar **pp, const UChar *end,
+                                         UChar *fold) {
+  const struct ByUnfoldKey *buk;
 
   OnigCodePoint code;
   int i, len, rlen;
@@ -110,9 +106,8 @@ onigenc_unicode_mbc_case_fold(OnigEncoding enc, OnigCaseFoldType flag,
         if (CASE_FOLD_IS_NOT_ASCII_ONLY(flag) ||
             ONIGENC_IS_ASCII_CODE(*FOLDS1_FOLD(buk->index)))
           return ONIGENC_CODE_TO_MBC(enc, *FOLDS1_FOLD(buk->index), fold);
-      }
-      else {
-        OnigCodePoint* addr;
+      } else {
+        OnigCodePoint *addr;
 
         FOLDS_FOLD_ADDR_BUK(buk, addr);
         rlen = 0;
@@ -133,37 +128,40 @@ onigenc_unicode_mbc_case_fold(OnigEncoding enc, OnigCaseFoldType flag,
   return len;
 }
 
-static int
-apply_case_fold1(OnigCaseFoldType flag, int from, int to,
-                 OnigApplyAllCaseFoldFunc f, void* arg)
-{
+static int apply_case_fold1(OnigCaseFoldType flag, int from, int to,
+                            OnigApplyAllCaseFoldFunc f, void *arg) {
   int i, j, k, n, r;
 
-  for (i = from; i < to; ) {
+  for (i = from; i < to;) {
     OnigCodePoint fold = *FOLDS1_FOLD(i);
-    if (CASE_FOLD_IS_ASCII_ONLY(flag) && ! ONIGENC_IS_ASCII_CODE(fold)) break;
+    if (CASE_FOLD_IS_ASCII_ONLY(flag) && !ONIGENC_IS_ASCII_CODE(fold))
+      break;
 
     n = FOLDS1_UNFOLDS_NUM(i);
     for (j = 0; j < n; j++) {
       OnigCodePoint unfold = FOLDS1_UNFOLDS(i)[j];
 
-      if (CASE_FOLD_IS_ASCII_ONLY(flag) && ! ONIGENC_IS_ASCII_CODE(unfold))
+      if (CASE_FOLD_IS_ASCII_ONLY(flag) && !ONIGENC_IS_ASCII_CODE(unfold))
         continue;
 
       r = (*f)(fold, &unfold, 1, arg);
-      if (r != 0) return r;
+      if (r != 0)
+        return r;
       r = (*f)(unfold, &fold, 1, arg);
-      if (r != 0) return r;
+      if (r != 0)
+        return r;
 
       for (k = 0; k < j; k++) {
         OnigCodePoint unfold2 = FOLDS1_UNFOLDS(i)[k];
-        if (CASE_FOLD_IS_ASCII_ONLY(flag) &&
-            ! ONIGENC_IS_ASCII_CODE(unfold2)) continue;
+        if (CASE_FOLD_IS_ASCII_ONLY(flag) && !ONIGENC_IS_ASCII_CODE(unfold2))
+          continue;
 
         r = (*f)(unfold, &unfold2, 1, arg);
-        if (r != 0) return r;
+        if (r != 0)
+          return r;
         r = (*f)(unfold2, &unfold, 1, arg);
-        if (r != 0) return r;
+        if (r != 0)
+          return r;
       }
     }
 
@@ -173,26 +171,28 @@ apply_case_fold1(OnigCaseFoldType flag, int from, int to,
   return 0;
 }
 
-static int
-apply_case_fold2(int from, int to, OnigApplyAllCaseFoldFunc f, void* arg)
-{
+static int apply_case_fold2(int from, int to, OnigApplyAllCaseFoldFunc f,
+                            void *arg) {
   int i, j, k, n, r;
 
-  for (i = from; i < to; ) {
-    OnigCodePoint* fold = FOLDS2_FOLD(i);
+  for (i = from; i < to;) {
+    OnigCodePoint *fold = FOLDS2_FOLD(i);
     n = FOLDS2_UNFOLDS_NUM(i);
     for (j = 0; j < n; j++) {
       OnigCodePoint unfold = FOLDS2_UNFOLDS(i)[j];
 
       r = (*f)(unfold, fold, 2, arg);
-      if (r != 0) return r;
+      if (r != 0)
+        return r;
 
       for (k = 0; k < j; k++) {
         OnigCodePoint unfold2 = FOLDS2_UNFOLDS(i)[k];
         r = (*f)(unfold, &unfold2, 1, arg);
-        if (r != 0) return r;
+        if (r != 0)
+          return r;
         r = (*f)(unfold2, &unfold, 1, arg);
-        if (r != 0) return r;
+        if (r != 0)
+          return r;
       }
     }
 
@@ -202,26 +202,28 @@ apply_case_fold2(int from, int to, OnigApplyAllCaseFoldFunc f, void* arg)
   return 0;
 }
 
-static int
-apply_case_fold3(int from, int to, OnigApplyAllCaseFoldFunc f, void* arg)
-{
+static int apply_case_fold3(int from, int to, OnigApplyAllCaseFoldFunc f,
+                            void *arg) {
   int i, j, k, n, r;
 
-  for (i = from; i < to; ) {
-    OnigCodePoint* fold = FOLDS3_FOLD(i);
+  for (i = from; i < to;) {
+    OnigCodePoint *fold = FOLDS3_FOLD(i);
     n = FOLDS3_UNFOLDS_NUM(i);
     for (j = 0; j < n; j++) {
       OnigCodePoint unfold = FOLDS3_UNFOLDS(i)[j];
 
       r = (*f)(unfold, fold, 3, arg);
-      if (r != 0) return r;
+      if (r != 0)
+        return r;
 
       for (k = 0; k < j; k++) {
         OnigCodePoint unfold2 = FOLDS3_UNFOLDS(i)[k];
         r = (*f)(unfold, &unfold2, 1, arg);
-        if (r != 0) return r;
+        if (r != 0)
+          return r;
         r = (*f)(unfold2, &unfold, 1, arg);
-        if (r != 0) return r;
+        if (r != 0)
+          return r;
       }
     }
 
@@ -231,35 +233,40 @@ apply_case_fold3(int from, int to, OnigApplyAllCaseFoldFunc f, void* arg)
   return 0;
 }
 
-extern int
-onigenc_unicode_apply_all_case_fold(OnigCaseFoldType flag,
-                                    OnigApplyAllCaseFoldFunc f, void* arg)
-{
+extern int onigenc_unicode_apply_all_case_fold(OnigCaseFoldType flag,
+                                               OnigApplyAllCaseFoldFunc f,
+                                               void *arg) {
   int r;
 
   r = apply_case_fold1(flag, 0, FOLDS1_NORMAL_END_INDEX, f, arg);
-  if (r != 0) return r;
+  if (r != 0)
+    return r;
 
 #ifdef USE_UNICODE_CASE_FOLD_TURKISH_AZERI
   if ((flag & ONIGENC_CASE_FOLD_TURKISH_AZERI) != 0) {
     code = 0x0131;
     r = (*f)(0x0049, &code, 1, arg);
-    if (r != 0) return r;
+    if (r != 0)
+      return r;
     code = 0x0049;
     r = (*f)(0x0131, &code, 1, arg);
-    if (r != 0) return r;
+    if (r != 0)
+      return r;
 
     code = 0x0130;
     r = (*f)(0x0069, &code, 1, arg);
-    if (r != 0) return r;
+    if (r != 0)
+      return r;
     code = 0x0069;
     r = (*f)(0x0130, &code, 1, arg);
-    if (r != 0) return r;
-  }
-  else {
+    if (r != 0)
+      return r;
+  } else {
 #endif
-    r = apply_case_fold1(flag, FOLDS1_NORMAL_END_INDEX, FOLDS1_END_INDEX, f, arg);
-    if (r != 0) return r;
+    r = apply_case_fold1(flag, FOLDS1_NORMAL_END_INDEX, FOLDS1_END_INDEX, f,
+                         arg);
+    if (r != 0)
+      return r;
 #ifdef USE_UNICODE_CASE_FOLD_TURKISH_AZERI
   }
 #endif
@@ -268,40 +275,42 @@ onigenc_unicode_apply_all_case_fold(OnigCaseFoldType flag,
     return 0;
 
   r = apply_case_fold2(0, FOLDS2_NORMAL_END_INDEX, f, arg);
-  if (r != 0) return r;
+  if (r != 0)
+    return r;
 
 #ifdef USE_UNICODE_CASE_FOLD_TURKISH_AZERI
   if ((flag & ONIGENC_CASE_FOLD_TURKISH_AZERI) == 0) {
 #endif
     r = apply_case_fold2(FOLDS2_NORMAL_END_INDEX, FOLDS2_END_INDEX, f, arg);
-    if (r != 0) return r;
+    if (r != 0)
+      return r;
 #ifdef USE_UNICODE_CASE_FOLD_TURKISH_AZERI
   }
 #endif
 
   r = apply_case_fold3(0, FOLDS3_NORMAL_END_INDEX, f, arg);
-  if (r != 0) return r;
+  if (r != 0)
+    return r;
 
   return 0;
 }
 
-extern int
-onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
-    OnigCaseFoldType flag, const OnigUChar* p, const OnigUChar* end,
-    OnigCaseFoldCodeItem items[])
-{
+extern int onigenc_unicode_get_case_fold_codes_by_str(
+    OnigEncoding enc, OnigCaseFoldType flag, const OnigUChar *p,
+    const OnigUChar *end, OnigCaseFoldCodeItem items[]) {
   int n, m, i, j, k, len, lens[3];
   int index;
   int fn, ncs[3];
   OnigCodePoint cs[3][4];
   OnigCodePoint code, codes[3], orig_codes[3];
-  const struct ByUnfoldKey* buk1;
+  const struct ByUnfoldKey *buk1;
 
   n = 0;
 
   code = ONIGENC_MBC_TO_CODE(enc, p, end);
   if (CASE_FOLD_IS_ASCII_ONLY(flag)) {
-    if (! ONIGENC_IS_ASCII_CODE(code)) return n;
+    if (!ONIGENC_IS_ASCII_CODE(code))
+      return n;
   }
   len = enclen(enc, p);
 
@@ -310,25 +319,22 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
     if (code == 0x0049) {
       items[0].byte_len = len;
       items[0].code_len = 1;
-      items[0].code[0]  = 0x0131;
+      items[0].code[0] = 0x0131;
       return 1;
-    }
-    else if (code == 0x0130) {
+    } else if (code == 0x0130) {
       items[0].byte_len = len;
       items[0].code_len = 1;
-      items[0].code[0]  = 0x0069;
+      items[0].code[0] = 0x0069;
       return 1;
-    }
-    else if (code == 0x0131) {
+    } else if (code == 0x0131) {
       items[0].byte_len = len;
       items[0].code_len = 1;
-      items[0].code[0]  = 0x0049;
+      items[0].code[0] = 0x0049;
       return 1;
-    }
-    else if (code == 0x0069) {
+    } else if (code == 0x0069) {
       items[0].byte_len = len;
       items[0].code_len = 1;
-      items[0].code[0]  = 0x0130;
+      items[0].code[0] = 0x0130;
       return 1;
     }
   }
@@ -341,15 +347,14 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
   buk1 = onigenc_unicode_unfold_key(orig_codes[0]);
   if (buk1 != 0 && buk1->fold_len == 1) {
     codes[0] = *FOLDS1_FOLD(buk1->index);
-  }
-  else
+  } else
     codes[0] = orig_codes[0];
 
   if ((flag & INTERNAL_ONIGENC_CASE_FOLD_MULTI_CHAR) == 0)
     goto fold1;
 
   if (p < end) {
-    const struct ByUnfoldKey* buk;
+    const struct ByUnfoldKey *buk;
 
     code = ONIGENC_MBC_TO_CODE(enc, p, end);
     orig_codes[1] = code;
@@ -358,8 +363,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
     buk = onigenc_unicode_unfold_key(orig_codes[1]);
     if (buk != 0 && buk->fold_len == 1) {
       codes[1] = *FOLDS1_FOLD(buk->index);
-    }
-    else
+    } else
       codes[1] = orig_codes[1];
 
     p += len;
@@ -371,8 +375,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
       buk = onigenc_unicode_unfold_key(orig_codes[2]);
       if (buk != 0 && buk->fold_len == 1) {
         codes[2] = *FOLDS1_FOLD(buk->index);
-      }
-      else
+      } else
         codes[2] = orig_codes[2];
 
       index = onigenc_unicode_fold3_key(codes);
@@ -381,7 +384,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
         for (i = 0; i < m; i++) {
           items[n].byte_len = lens[2];
           items[n].code_len = 1;
-          items[n].code[0]  = FOLDS3_UNFOLDS(index)[i];
+          items[n].code[0] = FOLDS3_UNFOLDS(index)[i];
           n++;
         }
 
@@ -393,7 +396,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
           if (sindex >= 0) {
             int m = FOLDS1_UNFOLDS_NUM(sindex);
             for (i = 0; i < m; i++) {
-              cs[fn][i+1] = FOLDS1_UNFOLDS(sindex)[i];
+              cs[fn][i + 1] = FOLDS1_UNFOLDS(sindex)[i];
             }
             ncs[fn] += m;
           }
@@ -408,9 +411,9 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
 
               items[n].byte_len = lens[2];
               items[n].code_len = 3;
-              items[n].code[0]  = cs[0][i];
-              items[n].code[1]  = cs[1][j];
-              items[n].code[2]  = cs[2][k];
+              items[n].code[0] = cs[0][i];
+              items[n].code[1] = cs[1][j];
+              items[n].code[2] = cs[2][k];
               n++;
             }
           }
@@ -426,7 +429,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
       for (i = 0; i < m; i++) {
         items[n].byte_len = lens[1];
         items[n].code_len = 1;
-        items[n].code[0]  = FOLDS2_UNFOLDS(index)[i];
+        items[n].code[0] = FOLDS2_UNFOLDS(index)[i];
         n++;
       }
 
@@ -438,7 +441,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
         if (sindex >= 0) {
           int m = FOLDS1_UNFOLDS_NUM(sindex);
           for (i = 0; i < m; i++) {
-            cs[fn][i+1] = FOLDS1_UNFOLDS(sindex)[i];
+            cs[fn][i + 1] = FOLDS1_UNFOLDS(sindex)[i];
           }
           ncs[fn] += m;
         }
@@ -450,8 +453,8 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
             continue;
           items[n].byte_len = lens[1];
           items[n].code_len = 2;
-          items[n].code[0]  = cs[0][i];
-          items[n].code[1]  = cs[1][j];
+          items[n].code[0] = cs[0][i];
+          items[n].code[1] = cs[1][j];
           n++;
         }
       }
@@ -460,7 +463,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
     }
   }
 
- fold1:
+fold1:
   if (buk1 != 0) {
     if (buk1->fold_len == 1) {
       int un;
@@ -469,7 +472,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
           ONIGENC_IS_ASCII_CODE(*FOLDS1_FOLD(buk1->index))) {
         items[0].byte_len = lens[0];
         items[0].code_len = 1;
-        items[0].code[0]  = *FOLDS1_FOLD(buk1->index);
+        items[0].code[0] = *FOLDS1_FOLD(buk1->index);
         n++;
       }
 
@@ -481,22 +484,22 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
               ONIGENC_IS_ASCII_CODE(unfold)) {
             items[n].byte_len = lens[0];
             items[n].code_len = 1;
-            items[n].code[0]  = unfold;
+            items[n].code[0] = unfold;
             n++;
           }
         }
       }
-    }
-    else if ((flag & INTERNAL_ONIGENC_CASE_FOLD_MULTI_CHAR) != 0) {
+    } else if ((flag & INTERNAL_ONIGENC_CASE_FOLD_MULTI_CHAR) != 0) {
       if (buk1->fold_len == 2) {
         m = FOLDS2_UNFOLDS_NUM(buk1->index);
         for (i = 0; i < m; i++) {
           OnigCodePoint unfold = FOLDS2_UNFOLDS(buk1->index)[i];
-          if (unfold == orig_codes[0]) continue;
+          if (unfold == orig_codes[0])
+            continue;
 
           items[n].byte_len = lens[0];
           items[n].code_len = 1;
-          items[n].code[0]  = unfold;
+          items[n].code[0] = unfold;
           n++;
         }
 
@@ -508,7 +511,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
           if (index >= 0) {
             int m = FOLDS1_UNFOLDS_NUM(index);
             for (i = 0; i < m; i++) {
-              cs[fn][i+1] = FOLDS1_UNFOLDS(index)[i];
+              cs[fn][i + 1] = FOLDS1_UNFOLDS(index)[i];
             }
             ncs[fn] += m;
           }
@@ -518,21 +521,21 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
           for (j = 0; j < ncs[1]; j++) {
             items[n].byte_len = lens[0];
             items[n].code_len = 2;
-            items[n].code[0]  = cs[0][i];
-            items[n].code[1]  = cs[1][j];
+            items[n].code[0] = cs[0][i];
+            items[n].code[1] = cs[1][j];
             n++;
           }
         }
-      }
-      else { /* fold_len == 3 */
+      } else { /* fold_len == 3 */
         m = FOLDS3_UNFOLDS_NUM(buk1->index);
         for (i = 0; i < m; i++) {
           OnigCodePoint unfold = FOLDS3_UNFOLDS(buk1->index)[i];
-          if (unfold == orig_codes[0]) continue;
+          if (unfold == orig_codes[0])
+            continue;
 
           items[n].byte_len = lens[0];
           items[n].code_len = 1;
-          items[n].code[0]  = unfold;
+          items[n].code[0] = unfold;
           n++;
         }
 
@@ -544,7 +547,7 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
           if (index >= 0) {
             int m = FOLDS1_UNFOLDS_NUM(index);
             for (i = 0; i < m; i++) {
-              cs[fn][i+1] = FOLDS1_UNFOLDS(index)[i];
+              cs[fn][i + 1] = FOLDS1_UNFOLDS(index)[i];
             }
             ncs[fn] += m;
           }
@@ -555,26 +558,25 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
             for (k = 0; k < ncs[2]; k++) {
               items[n].byte_len = lens[0];
               items[n].code_len = 3;
-              items[n].code[0]  = cs[0][i];
-              items[n].code[1]  = cs[1][j];
-              items[n].code[2]  = cs[2][k];
+              items[n].code[0] = cs[0][i];
+              items[n].code[1] = cs[1][j];
+              items[n].code[2] = cs[2][k];
               n++;
             }
           }
         }
       }
     }
-  }
-  else {
+  } else {
     int index = onigenc_unicode_fold1_key(orig_codes);
     if (index >= 0) {
       int m = FOLDS1_UNFOLDS_NUM(index);
       for (i = 0; i < m; i++) {
         code = FOLDS1_UNFOLDS(index)[i];
-        if (CASE_FOLD_IS_NOT_ASCII_ONLY(flag)||ONIGENC_IS_ASCII_CODE(code)) {
+        if (CASE_FOLD_IS_NOT_ASCII_ONLY(flag) || ONIGENC_IS_ASCII_CODE(code)) {
           items[n].byte_len = lens[0];
           items[n].code_len = 1;
-          items[n].code[0]  = code;
+          items[n].code[0] = code;
           n++;
         }
       }
@@ -589,7 +591,6 @@ onigenc_unicode_get_case_fold_codes_by_str(OnigEncoding enc,
 #else
 #include "unicode_property_data_posix.c"
 #endif
-
 
 #ifdef USE_UNICODE_WORD_BREAK
 
@@ -618,18 +619,16 @@ enum WB_TYPE {
 typedef struct {
   OnigCodePoint start;
   OnigCodePoint end;
-  enum WB_TYPE  type;
+  enum WB_TYPE type;
 } WB_RANGE_TYPE;
 
 #include "unicode_wb_data.c"
 
-static enum WB_TYPE
-wb_get_type(OnigCodePoint code)
-{
+static enum WB_TYPE wb_get_type(OnigCodePoint code) {
   OnigCodePoint low, high, x;
   enum WB_TYPE type;
 
-  for (low = 0, high = (OnigCodePoint )WB_RANGE_NUM; low < high; ) {
+  for (low = 0, high = (OnigCodePoint)WB_RANGE_NUM; low < high;) {
     x = (low + high) >> 1;
     if (code > WB_RANGES[x].end)
       low = x + 1;
@@ -637,31 +636,31 @@ wb_get_type(OnigCodePoint code)
       high = x;
   }
 
-  type = (low < (OnigCodePoint )WB_RANGE_NUM &&
-          code >= WB_RANGES[low].start) ?
-    WB_RANGES[low].type : WB_Any;
+  type = (low < (OnigCodePoint)WB_RANGE_NUM && code >= WB_RANGES[low].start)
+             ? WB_RANGES[low].type
+             : WB_Any;
 
   return type;
 }
 
-#define IS_WB_IGNORE_TAIL(t)  ((t) == WB_Extend || (t) == WB_Format || (t) == WB_ZWJ)
-#define IS_WB_AHLetter(t)     ((t) == WB_ALetter || (t) == WB_Hebrew_Letter)
-#define IS_WB_MidNumLetQ(t)   ((t) == WB_MidNumLet || (t) == WB_Single_Quote)
+#define IS_WB_IGNORE_TAIL(t)                                                   \
+  ((t) == WB_Extend || (t) == WB_Format || (t) == WB_ZWJ)
+#define IS_WB_AHLetter(t) ((t) == WB_ALetter || (t) == WB_Hebrew_Letter)
+#define IS_WB_MidNumLetQ(t) ((t) == WB_MidNumLet || (t) == WB_Single_Quote)
 
-static int
-wb_get_next_main_code(OnigEncoding enc, UChar* p, const UChar* end,
-                      OnigCodePoint* rcode, enum WB_TYPE* rtype)
-{
+static int wb_get_next_main_code(OnigEncoding enc, UChar *p, const UChar *end,
+                                 OnigCodePoint *rcode, enum WB_TYPE *rtype) {
   OnigCodePoint code;
   enum WB_TYPE type;
 
   while (TRUE) {
     p += enclen(enc, p);
-    if (p >= end) break;
+    if (p >= end)
+      break;
 
     code = ONIGENC_MBC_TO_CODE(enc, p, end);
     type = wb_get_type(code);
-    if (! IS_WB_IGNORE_TAIL(type)) {
+    if (!IS_WB_IGNORE_TAIL(type)) {
       *rcode = code;
       *rtype = type;
       return 1;
@@ -671,12 +670,10 @@ wb_get_next_main_code(OnigEncoding enc, UChar* p, const UChar* end,
   return 0;
 }
 
-extern int
-onigenc_wb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
-                             const UChar* start, const UChar* end)
-{
+extern int onigenc_wb_is_break_position(OnigEncoding enc, UChar *p, UChar *prev,
+                                        const UChar *start, const UChar *end) {
   int r;
-  UChar* pp;
+  UChar *pp;
   OnigCodePoint cfrom;
   OnigCodePoint cfrom2;
   OnigCodePoint cto;
@@ -687,31 +684,38 @@ onigenc_wb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
   enum WB_TYPE to2;
 
   /* WB1: sot / Any */
-  if (p == start) return TRUE;
+  if (p == start)
+    return TRUE;
   /* WB2: Any / eot */
-  if (p == end)   return TRUE;
+  if (p == end)
+    return TRUE;
 
   if (IS_NULL(prev)) {
     prev = onigenc_get_prev_char_head(enc, start, p);
-    if (IS_NULL(prev)) return TRUE;
+    if (IS_NULL(prev))
+      return TRUE;
   }
 
   cfrom = ONIGENC_MBC_TO_CODE(enc, prev, end);
-  cto   = ONIGENC_MBC_TO_CODE(enc, p, end);
+  cto = ONIGENC_MBC_TO_CODE(enc, p, end);
 
   from = wb_get_type(cfrom);
-  to   = wb_get_type(cto);
+  to = wb_get_type(cto);
 
   /* short cut */
-  if (from == 0 && to == 0) goto WB999;
+  if (from == 0 && to == 0)
+    goto WB999;
 
   /* WB3: CR + LF */
-  if (from == WB_CR && to == WB_LF) return FALSE;
+  if (from == WB_CR && to == WB_LF)
+    return FALSE;
 
   /* WB3a: (Newline|CR|LF) /  */
-  if (from == WB_Newline || from == WB_CR || from == WB_LF) return TRUE;
+  if (from == WB_Newline || from == WB_CR || from == WB_LF)
+    return TRUE;
   /* WB3b: / (Newline|CR|LF) */
-  if (to == WB_Newline || to == WB_CR || to == WB_LF) return TRUE;
+  if (to == WB_Newline || to == WB_CR || to == WB_LF)
+    return TRUE;
 
   /* WB3c: ZWJ + {Extended_Pictographic} */
   if (from == WB_ZWJ) {
@@ -720,29 +724,33 @@ onigenc_wb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
   }
 
   /* WB3d: WSegSpace + WSegSpace */
-  if (from == WB_WSegSpace && to == WB_WSegSpace) return FALSE;
+  if (from == WB_WSegSpace && to == WB_WSegSpace)
+    return FALSE;
 
   /* WB4:  X (Extend|Format|ZWJ)* -> X */
-  if (IS_WB_IGNORE_TAIL(to)) return FALSE;
+  if (IS_WB_IGNORE_TAIL(to))
+    return FALSE;
   if (IS_WB_IGNORE_TAIL(from)) {
     while ((pp = onigenc_get_prev_char_head(enc, start, prev)) != NULL) {
       prev = pp;
       cfrom = ONIGENC_MBC_TO_CODE(enc, prev, end);
       from = wb_get_type(cfrom);
-      if (! IS_WB_IGNORE_TAIL(from))
+      if (!IS_WB_IGNORE_TAIL(from))
         break;
     }
   }
 
   if (IS_WB_AHLetter(from)) {
     /* WB5: AHLetter + AHLetter */
-    if (IS_WB_AHLetter(to)) return FALSE;
+    if (IS_WB_AHLetter(to))
+      return FALSE;
 
     /* WB6: AHLetter + (MidLetter | MidNumLetQ) AHLetter */
     if (to == WB_MidLetter || IS_WB_MidNumLetQ(to)) {
       r = wb_get_next_main_code(enc, p, end, &cto2, &to2);
       if (r == 1) {
-        if (IS_WB_AHLetter(to2)) return FALSE;
+        if (IS_WB_AHLetter(to2))
+          return FALSE;
       }
     }
   }
@@ -755,23 +763,26 @@ onigenc_wb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
         prev = pp;
         cfrom2 = ONIGENC_MBC_TO_CODE(enc, prev, end);
         from2 = wb_get_type(cfrom2);
-        if (! IS_WB_IGNORE_TAIL(from2))
+        if (!IS_WB_IGNORE_TAIL(from2))
           break;
       }
 
-      if (IS_WB_AHLetter(from2)) return FALSE;
+      if (IS_WB_AHLetter(from2))
+        return FALSE;
     }
   }
 
   if (from == WB_Hebrew_Letter) {
     /* WB7a: Hebrew_Letter + Single_Quote */
-    if (to == WB_Single_Quote) return FALSE;
+    if (to == WB_Single_Quote)
+      return FALSE;
 
     /* WB7b: Hebrew_Letter + Double_Quote Hebrew_Letter */
     if (to == WB_Double_Quote) {
       r = wb_get_next_main_code(enc, p, end, &cto2, &to2);
       if (r == 1) {
-        if (to2 == WB_Hebrew_Letter) return FALSE;
+        if (to2 == WB_Hebrew_Letter)
+          return FALSE;
       }
     }
   }
@@ -784,20 +795,23 @@ onigenc_wb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
         prev = pp;
         cfrom2 = ONIGENC_MBC_TO_CODE(enc, prev, end);
         from2 = wb_get_type(cfrom2);
-        if (! IS_WB_IGNORE_TAIL(from2))
+        if (!IS_WB_IGNORE_TAIL(from2))
           break;
       }
 
-      if (from2 == WB_Hebrew_Letter) return FALSE;
+      if (from2 == WB_Hebrew_Letter)
+        return FALSE;
     }
   }
 
   if (to == WB_Numeric) {
     /* WB8: Numeric + Numeric */
-    if (from == WB_Numeric) return FALSE;
+    if (from == WB_Numeric)
+      return FALSE;
 
     /* WB9: AHLetter + Numeric */
-    if (IS_WB_AHLetter(from)) return FALSE;
+    if (IS_WB_AHLetter(from))
+      return FALSE;
 
     /* WB11: Numeric (MidNum | MidNumLetQ) + Numeric */
     if (from == WB_MidNum || IS_WB_MidNumLetQ(from)) {
@@ -806,34 +820,39 @@ onigenc_wb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
         prev = pp;
         cfrom2 = ONIGENC_MBC_TO_CODE(enc, prev, end);
         from2 = wb_get_type(cfrom2);
-        if (! IS_WB_IGNORE_TAIL(from2))
+        if (!IS_WB_IGNORE_TAIL(from2))
           break;
       }
 
-      if (from2 == WB_Numeric) return FALSE;
+      if (from2 == WB_Numeric)
+        return FALSE;
     }
   }
 
   if (from == WB_Numeric) {
     /* WB10: Numeric + AHLetter */
-    if (IS_WB_AHLetter(to)) return FALSE;
+    if (IS_WB_AHLetter(to))
+      return FALSE;
 
     /* WB12: Numeric + (MidNum | MidNumLetQ) Numeric */
     if (to == WB_MidNum || IS_WB_MidNumLetQ(to)) {
       r = wb_get_next_main_code(enc, p, end, &cto2, &to2);
       if (r == 1) {
-        if (to2 == WB_Numeric) return FALSE;
+        if (to2 == WB_Numeric)
+          return FALSE;
       }
     }
   }
 
   /* WB13: Katakana + Katakana */
-  if (from == WB_Katakana && to == WB_Katakana) return FALSE;
+  if (from == WB_Katakana && to == WB_Katakana)
+    return FALSE;
 
   /* WB13a: (AHLetter | Numeric | Katakana | ExtendNumLet) + ExtendNumLet */
-  if (IS_WB_AHLetter(from) || from == WB_Numeric || from == WB_Katakana
-      || from == WB_ExtendNumLet) {
-    if (to == WB_ExtendNumLet) return FALSE;
+  if (IS_WB_AHLetter(from) || from == WB_Numeric || from == WB_Katakana ||
+      from == WB_ExtendNumLet) {
+    if (to == WB_ExtendNumLet)
+      return FALSE;
   }
 
   /* WB13b: ExtendNumLet + (AHLetter | Numeric | Katakana) */
@@ -842,49 +861,48 @@ onigenc_wb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
       return FALSE;
   }
 
-
   /* WB15:   sot (RI RI)* RI + RI */
   /* WB16: [^RI] (RI RI)* RI + RI */
   if (from == WB_Regional_Indicator && to == WB_Regional_Indicator) {
     int n = 0;
     while ((prev = onigenc_get_prev_char_head(enc, start, prev)) != NULL) {
       cfrom2 = ONIGENC_MBC_TO_CODE(enc, prev, end);
-      from2  = wb_get_type(cfrom2);
+      from2 = wb_get_type(cfrom2);
       if (from2 != WB_Regional_Indicator)
         break;
 
       n++;
     }
-    if ((n % 2) == 0) return FALSE;
+    if ((n % 2) == 0)
+      return FALSE;
   }
 
- WB999:
+WB999:
   /* WB999: Any / Any */
   return TRUE;
 }
 
 #endif /* USE_UNICODE_WORD_BREAK */
 
-
 #ifdef USE_UNICODE_EXTENDED_GRAPHEME_CLUSTER
 
 enum EGCB_BREAK_TYPE {
   EGCB_NOT_BREAK = 0,
-  EGCB_BREAK     = 1,
-  EGCB_BREAK_UNDEF_GB11  = 2,
+  EGCB_BREAK = 1,
+  EGCB_BREAK_UNDEF_GB11 = 2,
   EGCB_BREAK_UNDEF_RI_RI = 3
 };
 
 enum EGCB_TYPE {
-  EGCB_Other   = 0,
-  EGCB_CR      = 1,
-  EGCB_LF      = 2,
+  EGCB_Other = 0,
+  EGCB_CR = 1,
+  EGCB_LF = 2,
   EGCB_Control = 3,
-  EGCB_Extend  = 4,
+  EGCB_Extend = 4,
   EGCB_Prepend = 5,
   EGCB_Regional_Indicator = 6,
   EGCB_SpacingMark = 7,
-  EGCB_ZWJ         = 8,
+  EGCB_ZWJ = 8,
 #if 0
   /* obsoleted */
   EGCB_E_Base         = 9,
@@ -892,28 +910,26 @@ enum EGCB_TYPE {
   EGCB_E_Modifier     = 11,
   EGCB_Glue_After_Zwj = 12,
 #endif
-  EGCB_L   = 13,
-  EGCB_LV  = 14,
+  EGCB_L = 13,
+  EGCB_LV = 14,
   EGCB_LVT = 15,
-  EGCB_T   = 16,
-  EGCB_V   = 17
+  EGCB_T = 16,
+  EGCB_V = 17
 };
 
 typedef struct {
-  OnigCodePoint  start;
-  OnigCodePoint  end;
+  OnigCodePoint start;
+  OnigCodePoint end;
   enum EGCB_TYPE type;
 } EGCB_RANGE_TYPE;
 
 #include "unicode_egcb_data.c"
 
-static enum EGCB_TYPE
-egcb_get_type(OnigCodePoint code)
-{
+static enum EGCB_TYPE egcb_get_type(OnigCodePoint code) {
   OnigCodePoint low, high, x;
   enum EGCB_TYPE type;
 
-  for (low = 0, high = (OnigCodePoint )EGCB_RANGE_NUM; low < high; ) {
+  for (low = 0, high = (OnigCodePoint)EGCB_RANGE_NUM; low < high;) {
     x = (low + high) >> 1;
     if (code > EGCB_RANGES[x].end)
       low = x + 1;
@@ -921,42 +937,46 @@ egcb_get_type(OnigCodePoint code)
       high = x;
   }
 
-  type = (low < (OnigCodePoint )EGCB_RANGE_NUM &&
-          code >= EGCB_RANGES[low].start) ?
-    EGCB_RANGES[low].type : EGCB_Other;
+  type = (low < (OnigCodePoint)EGCB_RANGE_NUM && code >= EGCB_RANGES[low].start)
+             ? EGCB_RANGES[low].type
+             : EGCB_Other;
 
   return type;
 }
 
-#define IS_CONTROL_CR_LF(code)   ((code) <= EGCB_Control && (code) >= EGCB_CR)
-#define IS_HANGUL(code)          ((code) >= EGCB_L)
+#define IS_CONTROL_CR_LF(code) ((code) <= EGCB_Control && (code) >= EGCB_CR)
+#define IS_HANGUL(code) ((code) >= EGCB_L)
 
 /* GB1 and GB2 are outside of this function. */
-static enum EGCB_BREAK_TYPE
-unicode_egcb_is_break_2code(OnigCodePoint from_code, OnigCodePoint to_code)
-{
+static enum EGCB_BREAK_TYPE unicode_egcb_is_break_2code(OnigCodePoint from_code,
+                                                        OnigCodePoint to_code) {
   enum EGCB_TYPE from;
   enum EGCB_TYPE to;
 
   from = egcb_get_type(from_code);
-  to   = egcb_get_type(to_code);
+  to = egcb_get_type(to_code);
 
   /* short cut */
-  if (from == 0 && to == 0) goto GB999;
+  if (from == 0 && to == 0)
+    goto GB999;
 
   /* GB3 */
-  if (from == EGCB_CR && to == EGCB_LF) return EGCB_NOT_BREAK;
+  if (from == EGCB_CR && to == EGCB_LF)
+    return EGCB_NOT_BREAK;
   /* GB4 */
-  if (IS_CONTROL_CR_LF(from)) return EGCB_BREAK;
+  if (IS_CONTROL_CR_LF(from))
+    return EGCB_BREAK;
   /* GB5 */
-  if (IS_CONTROL_CR_LF(to)) return EGCB_BREAK;
+  if (IS_CONTROL_CR_LF(to))
+    return EGCB_BREAK;
 
   if (IS_HANGUL(from) && IS_HANGUL(to)) {
     /* GB6 */
-    if (from == EGCB_L && to != EGCB_T) return EGCB_NOT_BREAK;
+    if (from == EGCB_L && to != EGCB_T)
+      return EGCB_NOT_BREAK;
     /* GB7 */
-    if ((from == EGCB_LV || from == EGCB_V)
-        && (to == EGCB_V || to == EGCB_T)) return EGCB_NOT_BREAK;
+    if ((from == EGCB_LV || from == EGCB_V) && (to == EGCB_V || to == EGCB_T))
+      return EGCB_NOT_BREAK;
 
     /* GB8 */
     if ((to == EGCB_T) && (from == EGCB_LVT || from == EGCB_T))
@@ -966,12 +986,15 @@ unicode_egcb_is_break_2code(OnigCodePoint from_code, OnigCodePoint to_code)
   }
 
   /* GB9 */
-  if (to == EGCB_Extend || to == EGCB_ZWJ) return EGCB_NOT_BREAK;
+  if (to == EGCB_Extend || to == EGCB_ZWJ)
+    return EGCB_NOT_BREAK;
 
   /* GB9a */
-  if (to == EGCB_SpacingMark) return EGCB_NOT_BREAK;
+  if (to == EGCB_SpacingMark)
+    return EGCB_NOT_BREAK;
   /* GB9b */
-  if (from == EGCB_Prepend) return EGCB_NOT_BREAK;
+  if (from == EGCB_Prepend)
+    return EGCB_NOT_BREAK;
 
   /* GB10 removed */
 
@@ -988,16 +1011,15 @@ unicode_egcb_is_break_2code(OnigCodePoint from_code, OnigCodePoint to_code)
     return EGCB_BREAK_UNDEF_RI_RI;
   }
 
- GB999:
+GB999:
   return EGCB_BREAK;
 }
 
 #endif /* USE_UNICODE_EXTENDED_GRAPHEME_CLUSTER */
 
-extern int
-onigenc_egcb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
-                               const UChar* start, const UChar* end)
-{
+extern int onigenc_egcb_is_break_position(OnigEncoding enc, UChar *p,
+                                          UChar *prev, const UChar *start,
+                                          const UChar *end) {
   OnigCodePoint from;
   OnigCodePoint to;
 #ifdef USE_UNICODE_EXTENDED_GRAPHEME_CLUSTER
@@ -1006,19 +1028,22 @@ onigenc_egcb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
 #endif
 
   /* GB1 and GB2 */
-  if (p == start) return 1;
-  if (p == end)   return 1;
+  if (p == start)
+    return 1;
+  if (p == end)
+    return 1;
 
   if (IS_NULL(prev)) {
     prev = onigenc_get_prev_char_head(enc, start, p);
-    if (IS_NULL(prev)) return 1;
+    if (IS_NULL(prev))
+      return 1;
   }
 
   from = ONIGENC_MBC_TO_CODE(enc, prev, end);
-  to   = ONIGENC_MBC_TO_CODE(enc, p, end);
+  to = ONIGENC_MBC_TO_CODE(enc, p, end);
 
 #ifdef USE_UNICODE_EXTENDED_GRAPHEME_CLUSTER
-  if (! ONIGENC_IS_UNICODE_ENCODING(enc)) {
+  if (!ONIGENC_IS_UNICODE_ENCODING(enc)) {
     return from != 0x000d || to != NEWLINE_CODE;
   }
 
@@ -1043,20 +1068,19 @@ onigenc_egcb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
     }
     break;
 
-  case EGCB_BREAK_UNDEF_RI_RI:
-    {
-      int n = 0;
-      while ((prev = onigenc_get_prev_char_head(enc, start, prev)) != NULL) {
-        from = ONIGENC_MBC_TO_CODE(enc, prev, end);
-        type = egcb_get_type(from);
-        if (type != EGCB_Regional_Indicator)
-          break;
+  case EGCB_BREAK_UNDEF_RI_RI: {
+    int n = 0;
+    while ((prev = onigenc_get_prev_char_head(enc, start, prev)) != NULL) {
+      from = ONIGENC_MBC_TO_CODE(enc, prev, end);
+      type = egcb_get_type(from);
+      if (type != EGCB_Regional_Indicator)
+        break;
 
-        n++;
-      }
-      if ((n % 2) == 0) return 0;
+      n++;
     }
-    break;
+    if ((n % 2) == 0)
+      return 0;
+  } break;
   }
 
   return 1;
@@ -1066,43 +1090,41 @@ onigenc_egcb_is_break_position(OnigEncoding enc, UChar* p, UChar* prev,
 #endif /* USE_UNICODE_EXTENDED_GRAPHEME_CLUSTER */
 }
 
-
-#define USER_DEFINED_PROPERTY_MAX_NUM  20
+#define USER_DEFINED_PROPERTY_MAX_NUM 20
 
 typedef struct {
   int ctype;
-  OnigCodePoint* ranges;
+  OnigCodePoint *ranges;
 } UserDefinedPropertyValue;
 
 static int UserDefinedPropertyNum;
 static UserDefinedPropertyValue
-UserDefinedPropertyRanges[USER_DEFINED_PROPERTY_MAX_NUM];
-static st_table* UserDefinedPropertyTable;
+    UserDefinedPropertyRanges[USER_DEFINED_PROPERTY_MAX_NUM];
+static st_table *UserDefinedPropertyTable;
 
-extern int
-onig_unicode_define_user_property(const char* name, OnigCodePoint* ranges)
-{
-  UserDefinedPropertyValue* e;
+extern int onig_unicode_define_user_property(const char *name,
+                                             OnigCodePoint *ranges) {
+  UserDefinedPropertyValue *e;
   int r;
   int i;
   int n;
   int len;
   int c;
-  char* s;
-  UChar* uname;
+  char *s;
+  UChar *uname;
 
   if (UserDefinedPropertyNum >= USER_DEFINED_PROPERTY_MAX_NUM)
     return ONIGERR_TOO_MANY_USER_DEFINED_OBJECTS;
 
-  len = (int )strlen(name);
+  len = (int)strlen(name);
   if (len >= PROPERTY_NAME_MAX_SIZE)
     return ONIGERR_TOO_LONG_PROPERTY_NAME;
 
-  s = (char* )xmalloc(len + 1);
+  s = (char *)xmalloc(len + 1);
   if (s == 0)
     return ONIGERR_MEMORY;
 
-  uname = (UChar* )name;
+  uname = (UChar *)name;
   n = 0;
   for (i = 0; i < len; i++) {
     c = uname[i];
@@ -1129,18 +1151,17 @@ onig_unicode_define_user_property(const char* name, OnigCodePoint* ranges)
   e = UserDefinedPropertyRanges + UserDefinedPropertyNum;
   e->ctype = CODE_RANGES_NUM + UserDefinedPropertyNum;
   e->ranges = ranges;
-  r = onig_st_insert_strend(UserDefinedPropertyTable,
-                            (const UChar* )s, (const UChar* )s + n,
-                            (hash_data_type )((void* )e));
-  if (r < 0) return r;
+  r = onig_st_insert_strend(UserDefinedPropertyTable, (const UChar *)s,
+                            (const UChar *)s + n, (hash_data_type)((void *)e));
+  if (r < 0)
+    return r;
 
   UserDefinedPropertyNum++;
   return 0;
 }
 
-extern int
-onigenc_unicode_is_code_ctype(OnigCodePoint code, unsigned int ctype)
-{
+extern int onigenc_unicode_is_code_ctype(OnigCodePoint code,
+                                         unsigned int ctype) {
   if (
 #ifdef USE_UNICODE_PROPERTIES
       ctype <= ONIGENC_MAX_STD_CTYPE &&
@@ -1152,25 +1173,23 @@ onigenc_unicode_is_code_ctype(OnigCodePoint code, unsigned int ctype)
   if (ctype >= CODE_RANGES_NUM) {
     int index = ctype - CODE_RANGES_NUM;
     if (index < UserDefinedPropertyNum)
-      return onig_is_in_code_range((UChar* )UserDefinedPropertyRanges[index].ranges, code);
+      return onig_is_in_code_range(
+          (UChar *)UserDefinedPropertyRanges[index].ranges, code);
     else
       return ONIGERR_TYPE_BUG;
   }
 
-  return onig_is_in_code_range((UChar* )CodeRanges[ctype], code);
+  return onig_is_in_code_range((UChar *)CodeRanges[ctype], code);
 }
 
-
-extern int
-onigenc_unicode_ctype_code_range(OnigCtype ctype, const OnigCodePoint* ranges[])
-{
+extern int onigenc_unicode_ctype_code_range(OnigCtype ctype,
+                                            const OnigCodePoint *ranges[]) {
   if (ctype >= CODE_RANGES_NUM) {
     int index = ctype - CODE_RANGES_NUM;
     if (index < UserDefinedPropertyNum) {
       *ranges = UserDefinedPropertyRanges[index].ranges;
       return 0;
-    }
-    else
+    } else
       return ONIGERR_TYPE_BUG;
   }
 
@@ -1179,20 +1198,18 @@ onigenc_unicode_ctype_code_range(OnigCtype ctype, const OnigCodePoint* ranges[])
 }
 
 extern int
-onigenc_utf16_32_get_ctype_code_range(OnigCtype ctype, OnigCodePoint* sb_out,
-                                      const OnigCodePoint* ranges[])
-{
+onigenc_utf16_32_get_ctype_code_range(OnigCtype ctype, OnigCodePoint *sb_out,
+                                      const OnigCodePoint *ranges[]) {
   *sb_out = 0x00;
   return onigenc_unicode_ctype_code_range(ctype, ranges);
 }
 
-extern int
-onigenc_unicode_property_name_to_ctype(OnigEncoding enc, UChar* name, UChar* end)
-{
+extern int onigenc_unicode_property_name_to_ctype(OnigEncoding enc, UChar *name,
+                                                  UChar *end) {
   int len;
   UChar *p;
   OnigCodePoint code;
-  const struct PoolPropertyNameCtype* pc;
+  const struct PoolPropertyNameCtype *pc;
   char buf[PROPERTY_NAME_MAX_SIZE];
 
   p = name;
@@ -1203,7 +1220,7 @@ onigenc_unicode_property_name_to_ctype(OnigEncoding enc, UChar* name, UChar* end
       return ONIGERR_INVALID_CHAR_PROPERTY_NAME;
 
     if (code != ' ' && code != '-' && code != '_') {
-      buf[len++] = (char )code;
+      buf[len++] = (char)code;
       if (len >= PROPERTY_NAME_MAX_SIZE)
         return ONIGERR_INVALID_CHAR_PROPERTY_NAME;
     }
@@ -1214,11 +1231,11 @@ onigenc_unicode_property_name_to_ctype(OnigEncoding enc, UChar* name, UChar* end
   buf[len] = 0;
 
   if (UserDefinedPropertyTable != 0) {
-    UserDefinedPropertyValue* e;
-    e = (UserDefinedPropertyValue* )NULL;
-    onig_st_lookup_strend(UserDefinedPropertyTable,
-                          (const UChar* )buf, (const UChar* )buf + len,
-                          (hash_data_type* )((void* )(&e)));
+    UserDefinedPropertyValue *e;
+    e = (UserDefinedPropertyValue *)NULL;
+    onig_st_lookup_strend(UserDefinedPropertyTable, (const UChar *)buf,
+                          (const UChar *)buf + len,
+                          (hash_data_type *)((void *)(&e)));
     if (e != 0) {
       return e->ctype;
     }
@@ -1232,7 +1249,7 @@ onigenc_unicode_property_name_to_ctype(OnigEncoding enc, UChar* name, UChar* end
       return ONIGERR_INVALID_CHAR_PROPERTY_NAME;
 #endif
 
-    return (int )pc->ctype;
+    return (int)pc->ctype;
   }
 
   return ONIGERR_INVALID_CHAR_PROPERTY_NAME;

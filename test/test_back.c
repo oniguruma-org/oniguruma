@@ -11,103 +11,97 @@
 
 #include <string.h>
 
-#define SLEN(s)  strlen(s)
+#define SLEN(s) strlen(s)
 
-static int nsucc  = 0;
-static int nfail  = 0;
+static int nsucc = 0;
+static int nfail = 0;
 static int nerror = 0;
 
 #ifdef __TRUSTINSOFT_ANALYZER__
 static int nall = 0;
 #endif
 
-static FILE* err_file;
+static FILE *err_file;
 
-static OnigRegion* region;
+static OnigRegion *region;
 
-static void xx(char* pattern, char* str, int from, int to, int mem, int not,
-               int error_no, int line_no)
-{
+static void xx(char *pattern, char *str, int from, int to, int mem, int not,
+               int error_no, int line_no) {
 #ifdef __TRUSTINSOFT_ANALYZER__
-  if (nall++ % TIS_TEST_CHOOSE_MAX != TIS_TEST_CHOOSE_CURRENT) return;
+  if (nall++ % TIS_TEST_CHOOSE_MAX != TIS_TEST_CHOOSE_CURRENT)
+    return;
 #endif
 
   int r;
-  regex_t* reg;
+  regex_t *reg;
   OnigErrorInfo einfo;
 
-  r = onig_new(&reg, (UChar* )pattern, (UChar* )(pattern + SLEN(pattern)),
-         ONIG_OPTION_DEFAULT, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT, &einfo);
+  r = onig_new(&reg, (UChar *)pattern, (UChar *)(pattern + SLEN(pattern)),
+               ONIG_OPTION_DEFAULT, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT,
+               &einfo);
   if (r) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
 
     if (error_no == 0) {
-      onig_error_code_to_str((UChar* )s, r, &einfo);
+      onig_error_code_to_str((UChar *)s, r, &einfo);
       fprintf(err_file, "ERROR: %s  /%s/ #%d\n", s, pattern, line_no);
       nerror++;
-    }
-    else {
+    } else {
       if (r == error_no) {
         fprintf(stdout, "OK(ERROR): /%s/ %d  #%d\n", pattern, r, line_no);
         nsucc++;
-      }
-      else {
+      } else {
         fprintf(stdout, "FAIL(ERROR): /%s/ '%s', %d, %d  #%d\n", pattern, str,
                 error_no, r, line_no);
         nfail++;
       }
     }
 
-    return ;
+    return;
   }
 
-  r = onig_search(reg, (UChar* )str, (UChar* )(str + SLEN(str)),
-                  (UChar* )(str + SLEN(str)), (UChar* )str,
-                  region, ONIG_OPTION_NONE);
+  r = onig_search(reg, (UChar *)str, (UChar *)(str + SLEN(str)),
+                  (UChar *)(str + SLEN(str)), (UChar *)str, region,
+                  ONIG_OPTION_NONE);
   if (r < ONIG_MISMATCH) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
 
     if (error_no == 0) {
-      onig_error_code_to_str((UChar* )s, r);
+      onig_error_code_to_str((UChar *)s, r);
       fprintf(err_file, "ERROR: %s  /%s/  #%d\n", s, pattern, line_no);
       nerror++;
-    }
-    else {
+    } else {
       if (r == error_no) {
-        fprintf(stdout, "OK(ERROR): /%s/ '%s', %d  #%d\n", pattern, str, r, line_no);
+        fprintf(stdout, "OK(ERROR): /%s/ '%s', %d  #%d\n", pattern, str, r,
+                line_no);
         nsucc++;
-      }
-      else {
-        fprintf(stdout, "FAIL ERROR NO: /%s/ '%s', %d, %d  #%d\n", pattern,
-		str, error_no, r, line_no);
+      } else {
+        fprintf(stdout, "FAIL ERROR NO: /%s/ '%s', %d, %d  #%d\n", pattern, str,
+                error_no, r, line_no);
         nfail++;
       }
     }
 
-    return ;
+    return;
   }
 
   if (r == ONIG_MISMATCH) {
-    if (not) {
+    if (not ) {
       fprintf(stdout, "OK(N): /%s/ '%s'  #%d\n", pattern, str, line_no);
       nsucc++;
-    }
-    else {
+    } else {
       fprintf(stdout, "FAIL: /%s/ '%s'  #%d\n", pattern, str, line_no);
       nfail++;
     }
-  }
-  else {
-    if (not) {
+  } else {
+    if (not ) {
       fprintf(stdout, "FAIL(N): /%s/ '%s'  #%d\n", pattern, str, line_no);
       nfail++;
-    }
-    else {
+    } else {
       if (region->beg[mem] == from && region->end[mem] == to) {
         fprintf(stdout, "OK: /%s/ '%s'  #%d\n", pattern, str, line_no);
         nsucc++;
-      }
-      else {
+      } else {
         fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d  #%d\n", pattern, str,
                 from, to, region->beg[mem], region->end[mem], line_no);
         nfail++;
@@ -117,37 +111,33 @@ static void xx(char* pattern, char* str, int from, int to, int mem, int not,
   onig_free(reg);
 }
 
-static void xx2(char* pattern, char* str, int from, int to, int line_no)
-{
+static void xx2(char *pattern, char *str, int from, int to, int line_no) {
   xx(pattern, str, from, to, 0, 0, 0, line_no);
 }
 
-static void xx3(char* pattern, char* str, int from, int to, int mem, int line_no)
-{
+static void xx3(char *pattern, char *str, int from, int to, int mem,
+                int line_no) {
   xx(pattern, str, from, to, mem, 0, 0, line_no);
 }
 
-static void xn(char* pattern, char* str, int line_no)
-{
+static void xn(char *pattern, char *str, int line_no) {
   xx(pattern, str, 0, 0, 0, 1, 0, line_no);
 }
 
-static void xe(char* pattern, char* str, int error_no, int line_no)
-{
+static void xe(char *pattern, char *str, int error_no, int line_no) {
   xx(pattern, str, 0, 0, 0, 0, error_no, line_no);
 }
 
-#define x2(p,s,f,t)    xx2(p,s,f,t, __LINE__)
-#define x3(p,s,f,t,m)  xx3(p,s,f,t,m, __LINE__)
-#define n(p,s)          xn(p,s,   __LINE__)
-#define e(p,s,en)       xe(p,s,en, __LINE__)
+#define x2(p, s, f, t) xx2(p, s, f, t, __LINE__)
+#define x3(p, s, f, t, m) xx3(p, s, f, t, m, __LINE__)
+#define n(p, s) xn(p, s, __LINE__)
+#define e(p, s, en) xe(p, s, en, __LINE__)
 
-extern int main(int argc, char* argv[])
-{
+extern int main(int argc, char *argv[]) {
   OnigEncoding use_encs[1];
 
   use_encs[0] = ONIG_ENCODING_UTF8;
-  onig_initialize(use_encs, sizeof(use_encs)/sizeof(use_encs[0]));
+  onig_initialize(use_encs, sizeof(use_encs) / sizeof(use_encs[0]));
 
   err_file = stdout;
 
@@ -172,7 +162,8 @@ extern int main(int argc, char* argv[])
   x2("\\x61", "a", 0, 1);
   x2("aa", "aa", 0, 2);
   x2("aaa", "aaa", 0, 3);
-  x2("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0, 35);
+  x2("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0, 35);
   x2("ab", "ab", 0, 2);
   x2("b", "ab", 1, 2);
   x2("bc", "abc", 1, 3);
@@ -229,7 +220,8 @@ extern int main(int argc, char* argv[])
   x2("[\\x5a-\\x5c]", "\x5b", 0, 1);
   x2("[\\x6A-\\x6D]", "\x6c", 0, 1);
   n("[\\x6A-\\x6D]", "\x6E");
-  n("^[0-9A-F]+ 0+ UNDEF ", "75F 00000000 SECT14A notype ()    External    | _rb_apply");
+  n("^[0-9A-F]+ 0+ UNDEF ",
+    "75F 00000000 SECT14A notype ()    External    | _rb_apply");
   x2("[\\[]", "[", 0, 1);
   x2("[\\]]", "]", 0, 1);
   x2("[&]", "&", 0, 1);
@@ -579,16 +571,29 @@ extern int main(int argc, char* argv[])
   x2("(?:(?<x>)|(?<x>efg))\\k<x>", "", 0, 0);
   x2("(?:(?<x>abc)|(?<x>efg))\\k<x>", "abcefgefg", 3, 9);
   n("(?:(?<x>abc)|(?<x>efg))\\k<x>", "abcefg");
-  x2("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|(?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>...........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............))\\k<n1>$", "a-pyumpyum", 2, 10);
-  x3("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|(?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>...........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............))\\k<n1>$", "xxxxabcdefghijklmnabcdefghijklmn", 4, 18, 14);
-  x3("(?<name1>)(?<name2>)(?<name3>)(?<name4>)(?<name5>)(?<name6>)(?<name7>)(?<name8>)(?<name9>)(?<name10>)(?<name11>)(?<name12>)(?<name13>)(?<name14>)(?<name15>)(?<name16>aaa)(?<name17>)$", "aaa", 0, 3, 16);
+  x2("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|("
+     "?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>.."
+     ".........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............)"
+     ")\\k<n1>$",
+     "a-pyumpyum", 2, 10);
+  x3("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|("
+     "?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>.."
+     ".........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............)"
+     ")\\k<n1>$",
+     "xxxxabcdefghijklmnabcdefghijklmn", 4, 18, 14);
+  x3("(?<name1>)(?<name2>)(?<name3>)(?<name4>)(?<name5>)(?<name6>)(?<name7>)(?<"
+     "name8>)(?<name9>)(?<name10>)(?<name11>)(?<name12>)(?<name13>)(?<name14>)("
+     "?<name15>)(?<name16>aaa)(?<name17>)$",
+     "aaa", 0, 3, 16);
   x2("(?<foo>a|\\(\\g<foo>\\))", "a", 0, 1);
   x2("(?<foo>a|\\(\\g<foo>\\))", "((((((a))))))", 6, 7);
   x3("(?<foo>a|\\(\\g<foo>\\))", "((((((((a))))))))", 8, 9, 1);
   x2("\\g<bar>|\\zEND(?<bar>.*abc$)", "abcxxxabc", 6, 9);
   x2("\\g<1>|\\zEND(.a.)", "bac", 0, 3);
   x3("\\g<_A>\\g<_A>|\\zEND(.a.)(?<_A>.b.)", "xbxyby", 3, 6, 1);
-  x2("\\A(?:\\g<pon>|\\g<pan>|\\zEND  (?<pan>a|c\\g<pon>c)(?<pon>b|d\\g<pan>d))$", "cdcbcdc", 0, 7);
+  x2("\\A(?:\\g<pon>|\\g<pan>|\\zEND  "
+     "(?<pan>a|c\\g<pon>c)(?<pon>b|d\\g<pan>d))$",
+     "cdcbcdc", 0, 7);
   x2("\\A(?<n>|a\\g<m>)\\z|\\zEND (?<m>\\g<n>)", "aaaa", 0, 4);
   x2("(?<n>(a|b\\g<n>c){3,5})", "baaaaca", 2, 5);
   x2("(?<n>(a|b\\g<n>c){3,5})", "baaaacaaaaa", 8, 11);
@@ -601,16 +606,18 @@ extern int main(int argc, char* argv[])
   x2("x((.)*)*x(?i:\\1)\\Z", "0x1x2x1X2", 1, 9);
   x2("(?:()|()|()|()|()|())*\\2\\5", "", 0, 0);
   x2("(?:()|()|()|(x)|()|())*\\2b\\5", "b", 0, 1);
-  x2("[0-9-a]", "-", 0, 1);   // PR#44
-  n("[0-9-a]", ":");          // PR#44
+  x2("[0-9-a]", "-", 0, 1);                                // PR#44
+  n("[0-9-a]", ":");                                       // PR#44
   x3("(\\(((?:[^(]|\\g<1>)*)\\))", "(abc)(abc)", 6, 9, 2); // PR#43
   x2("\\o{101}", "A", 0, 1);
   x2("\\A(a|b\\g<1>c)\\k<1+3>\\z", "bbacca", 0, 6);
   n("\\A(a|b\\g<1>c)\\k<1+3>\\z", "bbaccb");
   x2("(?i)\\A(a|b\\g<1>c)\\k<1+2>\\z", "bBACcbac", 0, 8);
   x2("(?i)(?<X>aa)|(?<X>bb)\\k<X>", "BBbb", 0, 4);
-  x2("(?:\\k'+1'B|(A)C)*", "ACAB", 4, 4); // relative backref by postitive number
-  x2("\\g<+2>(abc)(ABC){0}", "ABCabc", 0, 6); // relative call by positive number
+  x2("(?:\\k'+1'B|(A)C)*", "ACAB", 4,
+     4); // relative backref by postitive number
+  x2("\\g<+2>(abc)(ABC){0}", "ABCabc", 0,
+     6); // relative call by positive number
   x2("A\\g'0'|B()", "AAAAB", 4, 5);
   x3("(A\\g'0')|B", "AAAAB", -1, -1, 1);
   x2("(a*)(?(1))aa", "aaaaa", 3, 5);
@@ -651,46 +658,48 @@ extern int main(int argc, char* argv[])
   x2("(|(?:a(?:\\g'1')*))b|", "abc", 3, 3);
   x2("^(\"|)(.*)\\1$", "XX", 0, 2);
   x2("(abc|def|ghi|jkl|mno|pqr|stu){0,10}?\\z", "admno", 5, 5);
-  x2("(abc|(def|ghi|jkl|mno|pqr){0,7}?){5}\\z", "adpqrpqrpqr", 11, 11); // cover OP_REPEAT_INC_NG_SG
+  x2("(abc|(def|ghi|jkl|mno|pqr){0,7}?){5}\\z", "adpqrpqrpqr", 11,
+     11);                            // cover OP_REPEAT_INC_NG_SG
   x2("(?!abc).*\\z", "abcde", 5, 5); // cover OP_PREC_READ_NOT_END
-  x2("(.{2,})?", "abcde", 5, 5); // up coverage
-  x2("((a|b|c|d|e|f|g|h|i|j|k|l|m|n)+)?", "abcde", 5, 5); // up coverage
-  x2("((a|b|c|d|e|f|g|h|i|j|k|l|m|n){3,})?", "abcde", 5, 5); // up coverage
+  x2("(.{2,})?", "abcde", 5, 5);     // up coverage
+  x2("((a|b|c|d|e|f|g|h|i|j|k|l|m|n)+)?", "abcde", 5, 5);         // up coverage
+  x2("((a|b|c|d|e|f|g|h|i|j|k|l|m|n){3,})?", "abcde", 5, 5);      // up coverage
   x2("((?:a(?:b|c|d|e|f|g|h|i|j|k|l|m|n))+)?", "abacadae", 8, 8); // up coverage
-  x2("((?:a(?:b|c|d|e|f|g|h|i|j|k|l|m|n))+?)?z", "abacadaez", 8, 9); // up coverage
-  x2("\\A((a|b)\?\?)?z", "bz", 0, 2); // up coverage
-  x2("((?<x>abc){0}a\\g<x>d)+", "aabcd", 0, 5); // up coverage
-  x2("((?(abc)true|false))+", "false", 0, 5); // up coverage
-  x2("((?i:abc)d)+", "abcdABCd", 4, 8); // up coverage
-  x2("((?<!abc)def)+", "bcdef", 2, 5); // up coverage
-  x2("(\\ba)+", "aaa", 0, 1); // up coverage
-  x2("()(?<x>ab)(?(<x>)a|b)", "aba", 0, 3); // up coverage
-  x2("(?<=a.b)c", "azbc", 3, 4); // up coverage
-  n("(?<=(?:abcde){30})z", "abc"); // up coverage
-  x2("(?<=(?(a)a|bb))z", "aaz", 2, 3); // up coverage
-  x2("[a]*\\W", "aa@", 2, 3); // up coverage
-  x2("[a]*[b]", "aab", 2, 3); // up coverage
-  n("a*\\W", "aaa"); // up coverage
-  n("(?W)a*\\W", "aaa"); // up coverage
-  x2("(?<=ab(?<=ab))", "ab", 2, 2); // up coverage
+  x2("((?:a(?:b|c|d|e|f|g|h|i|j|k|l|m|n))+?)?z", "abacadaez", 8,
+     9);                                         // up coverage
+  x2("\\A((a|b)\?\?)?z", "bz", 0, 2);            // up coverage
+  x2("((?<x>abc){0}a\\g<x>d)+", "aabcd", 0, 5);  // up coverage
+  x2("((?(abc)true|false))+", "false", 0, 5);    // up coverage
+  x2("((?i:abc)d)+", "abcdABCd", 4, 8);          // up coverage
+  x2("((?<!abc)def)+", "bcdef", 2, 5);           // up coverage
+  x2("(\\ba)+", "aaa", 0, 1);                    // up coverage
+  x2("()(?<x>ab)(?(<x>)a|b)", "aba", 0, 3);      // up coverage
+  x2("(?<=a.b)c", "azbc", 3, 4);                 // up coverage
+  n("(?<=(?:abcde){30})z", "abc");               // up coverage
+  x2("(?<=(?(a)a|bb))z", "aaz", 2, 3);           // up coverage
+  x2("[a]*\\W", "aa@", 2, 3);                    // up coverage
+  x2("[a]*[b]", "aab", 2, 3);                    // up coverage
+  n("a*\\W", "aaa");                             // up coverage
+  n("(?W)a*\\W", "aaa");                         // up coverage
+  x2("(?<=ab(?<=ab))", "ab", 2, 2);              // up coverage
   x2("(?<x>a)(?<x>b)(\\k<x>)+", "abbaab", 0, 6); // up coverage
-  x2("()(\\1)(\\2)", "abc", 3, 3); // up coverage
-  x2("((?(a)b|c))(\\1)", "abab", 0, 4); // up coverage
-  x2("(?<x>$|b\\g<x>)", "bbb", 3, 3); // up coverage
-  x2("(?<x>(?(a)a|b)|c\\g<x>)", "cccb", 3, 4); // up coverage
-  x2("(a)(?(1)a*|b*)+", "aaaa", 3, 4); // up coverage
-  x2("[[^abc]&&cde]*", "de", 2, 2); // up coverage
-  n("(a){10}{10}", "aa"); // up coverage
-  x2("(?:a?)+", "aa", 2, 2); // up coverage
-  x2("(?:a?)*?", "a", 1, 1); // up coverage
-  x2("(?:a*)*?", "a", 1, 1); // up coverage
-  x2("(?:a+?)*", "a", 1, 1); // up coverage
-  x2("\\h", "5", 0, 1); // up coverage
-  x2("\\H", "z", 0, 1); // up coverage
-  x2("[\\h]", "5", 0, 1); // up coverage
-  x2("[\\H]", "z", 0, 1); // up coverage
-  x2("[\\o{101}]", "A", 0, 1); // up coverage
-  x2("[\\u0041]", "A", 0, 1); // up coverage
+  x2("()(\\1)(\\2)", "abc", 3, 3);               // up coverage
+  x2("((?(a)b|c))(\\1)", "abab", 0, 4);          // up coverage
+  x2("(?<x>$|b\\g<x>)", "bbb", 3, 3);            // up coverage
+  x2("(?<x>(?(a)a|b)|c\\g<x>)", "cccb", 3, 4);   // up coverage
+  x2("(a)(?(1)a*|b*)+", "aaaa", 3, 4);           // up coverage
+  x2("[[^abc]&&cde]*", "de", 2, 2);              // up coverage
+  n("(a){10}{10}", "aa");                        // up coverage
+  x2("(?:a?)+", "aa", 2, 2);                     // up coverage
+  x2("(?:a?)*?", "a", 1, 1);                     // up coverage
+  x2("(?:a*)*?", "a", 1, 1);                     // up coverage
+  x2("(?:a+?)*", "a", 1, 1);                     // up coverage
+  x2("\\h", "5", 0, 1);                          // up coverage
+  x2("\\H", "z", 0, 1);                          // up coverage
+  x2("[\\h]", "5", 0, 1);                        // up coverage
+  x2("[\\H]", "z", 0, 1);                        // up coverage
+  x2("[\\o{101}]", "A", 0, 1);                   // up coverage
+  x2("[\\u0041]", "A", 0, 1);                    // up coverage
 
   x2("(?~)", "", 0, 0);
   x2("(?~)", "A", 1, 1);
@@ -752,7 +761,9 @@ extern int main(int argc, char* argv[])
   n("い", "あ");
   x2("うう", "うう", 0, 6);
   x2("あいう", "あいう", 0, 9);
-  x2("こここここここここここここここここここここここここここここここここここ", "こここここここここここここここここここここここここここここここここここ", 0, 105);
+  x2("こここここここここここここここここここここここここここここここここここ",
+     "こここここここここここここここここここここここここここここここここここ",
+     0, 105);
   x2("あ", "いあ", 3, 6);
   x2("いう", "あいう", 3, 9);
   x2("\\xca\\xb8", "\xca\xb8", 0, 2);
@@ -835,7 +846,8 @@ extern int main(int argc, char* argv[])
   x2("を(?:かき|きく)け", "をきくけ", 0, 12);
   x2("あい|(?:あう|あを)", "あを", 0, 6);
   x2("あ|い|う", "えう", 3, 6);
-  x2("あ|い|うえ|おかき|く|けこさ|しすせ|そ|たち|つてとなに|ぬね", "しすせ", 0, 9);
+  x2("あ|い|うえ|おかき|く|けこさ|しすせ|そ|たち|つてとなに|ぬね", "しすせ", 0,
+     9);
   n("あ|い|うえ|おかき|く|けこさ|しすせ|そ|たち|つてとなに|ぬね", "すせ");
   x2("あ|^わ", "ぶあ", 3, 6);
   x2("あ|^を", "をあ", 3, 6);
@@ -996,7 +1008,9 @@ extern int main(int argc, char* argv[])
   x3("(.(..\\d.)\\2)", "あ12341234", 0, 11, 1);
   x2("((?i:あvず))\\1", "あvずあvず", 0, 14);
   x2("(?<愚か>変|\\(\\g<愚か>\\))", "((((((変))))))", 6, 9);
-  x2("\\A(?:\\g<阿_1>|\\g<云_2>|\\z終了  (?<阿_1>観|自\\g<云_2>自)(?<云_2>在|菩薩\\g<阿_1>菩薩))$", "菩薩自菩薩自在自菩薩自菩薩", 0, 39);
+  x2("\\A(?:\\g<阿_1>|\\g<云_2>|\\z終了  "
+     "(?<阿_1>観|自\\g<云_2>自)(?<云_2>在|菩薩\\g<阿_1>菩薩))$",
+     "菩薩自菩薩自在自菩薩自菩薩", 0, 39);
   x2("[[ひふ]]", "ふ", 0, 3);
   x2("[[いおう]か]", "か", 0, 3);
   n("[[^あ]]", "あ");
@@ -1019,8 +1033,10 @@ extern int main(int argc, char* argv[])
   x2("[^[^a-zあいう]&&[^bcdefgうえお]g-w]", "f", 0, 1);
   x2("[^[^a-zあいう]&&[^bcdefgうえお]g-w]", "g", 0, 1);
   n("[^[^a-zあいう]&&[^bcdefgうえお]g-w]", "2");
-  x2("a<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>", 0, 44);
-  x2(".<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>", 0, 44);
+  x2("a<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>",
+     0, 44);
+  x2(".<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>",
+     0, 44);
   x2("\\n?\\z", "こんにちは", 15, 15);
   x2("(?m).*", "青赤黄", 9, 9);
   x2("(?m).*a", "青赤黄a", 9, 10);
@@ -1105,8 +1121,9 @@ extern int main(int argc, char* argv[])
   n("(?P:\\B)", "h");
 
   x2("\\p{InBasicLatin}", "\x41", 0, 1);
-  //x2("\\p{Grapheme_Cluster_Break_Regional_Indicator}", "\xF0\x9F\x87\xA9", 0, 4);
-  //n("\\p{Grapheme_Cluster_Break_Regional_Indicator}",  "\xF0\x9F\x87\xA5");
+  // x2("\\p{Grapheme_Cluster_Break_Regional_Indicator}", "\xF0\x9F\x87\xA9", 0,
+  // 4); n("\\p{Grapheme_Cluster_Break_Regional_Indicator}",
+  // "\xF0\x9F\x87\xA5");
 
   // extended grapheme cluster
 
@@ -1165,24 +1182,24 @@ extern int main(int argc, char* argv[])
   // Text Segment: Extended Grapheme Cluster <-> Word Boundary
   x2("(?y{g})\\yabc\\y", "abc", 0, 3);
   x2("(?y{g})\\y\\X\\y", "abc", 2, 3);
-  x2("(?y{w})\\yabc\\y", "abc", 0, 3); // WB1, WB2
-  x2("(?y{w})\\y\\X", "\r\n", 0, 2); // WB3
-  x2("(?y{w})\\X", "\x0cz", 1, 2); // WB3a
-  x2("(?y{w})\\X", "q\x0c", 1, 2); // WB3b
+  x2("(?y{w})\\yabc\\y", "abc", 0, 3);                   // WB1, WB2
+  x2("(?y{w})\\y\\X", "\r\n", 0, 2);                     // WB3
+  x2("(?y{w})\\X", "\x0cz", 1, 2);                       // WB3a
+  x2("(?y{w})\\X", "q\x0c", 1, 2);                       // WB3b
   x2("(?y{w})\\y\\X", "\xE2\x80\x8D\xE2\x9D\x87", 0, 6); // WB3c
-  x2("(?y{w})\\y\\X", "\x20\x20", 0, 2); // WB3d
-  x2("(?y{w})\\y\\X", "a\xE2\x80\x8D", 0, 4); // WB4
-  x2("(?y{w})\\y\\X\\y", "abc", 0, 3); // WB5
-  x2("(?y{w})\\y\\X\\y", "v\xCE\x87w", 0, 4); // WB6, WB7
-  x2("(?y{w})\\y\\X\\y", "\xD7\x93\x27", 0, 3); // WB7a
-  x2("(?y{w})\\y\\X\\y", "\xD7\x93\x22\xD7\x93", 0, 5); // WB7b, WB7c
-  x2("(?y{w})\\y\\X", "14 45", 3, 5); // WB8
-  x2("(?y{w})\\y\\X", "a14", 0, 3); // WB9
-  x2("(?y{w})\\y\\X", "832e", 0, 4); // WB10
-  x2("(?y{w})\\y\\X", "8\xEF\xBC\x8C\xDB\xB0", 0, 6); // WB11, WB12
-  x2("(?y{w})\\y\\X\\y", "ケン", 0, 6); // WB13
-  x2("(?y{w})\\y\\X\\y", "ケン\xE2\x80\xAFタ", 0, 12); // WB13a, WB13b
-  x2("(?y{w})\\y\\X\\y", "\x21\x23", 1, 2); // WB999
+  x2("(?y{w})\\y\\X", "\x20\x20", 0, 2);                 // WB3d
+  x2("(?y{w})\\y\\X", "a\xE2\x80\x8D", 0, 4);            // WB4
+  x2("(?y{w})\\y\\X\\y", "abc", 0, 3);                   // WB5
+  x2("(?y{w})\\y\\X\\y", "v\xCE\x87w", 0, 4);            // WB6, WB7
+  x2("(?y{w})\\y\\X\\y", "\xD7\x93\x27", 0, 3);          // WB7a
+  x2("(?y{w})\\y\\X\\y", "\xD7\x93\x22\xD7\x93", 0, 5);  // WB7b, WB7c
+  x2("(?y{w})\\y\\X", "14 45", 3, 5);                    // WB8
+  x2("(?y{w})\\y\\X", "a14", 0, 3);                      // WB9
+  x2("(?y{w})\\y\\X", "832e", 0, 4);                     // WB10
+  x2("(?y{w})\\y\\X", "8\xEF\xBC\x8C\xDB\xB0", 0, 6);    // WB11, WB12
+  x2("(?y{w})\\y\\X\\y", "ケン", 0, 6);                  // WB13
+  x2("(?y{w})\\y\\X\\y", "ケン\xE2\x80\xAFタ", 0, 12);   // WB13a, WB13b
+  x2("(?y{w})\\y\\X\\y", "\x21\x23", 1, 2);              // WB999
   x2("(?y{w})\\y\\X\\y", "山ア", 3, 6);
   x2("(?y{w})\\y\\X", "3.14", 0, 4);
   x2("(?y{w})\\y\\X", "3 14", 2, 4);
@@ -1196,19 +1213,29 @@ extern int main(int argc, char* argv[])
 
   x2("c.*\\b", "abc", 2, 3);
   x2("\\b.*abc.*\\b", "abc", 0, 3);
-  x2("((?()0+)+++(((0\\g<0>)0)|())++++((?(1)(0\\g<0>))++++++0*())++++((?(1)(0\\g<1>)+)++++++++++*())++++((?(1)((0)\\g<0>)+)++())+0++*+++(((0\\g<0>))*())++++((?(1)(0\\g<0>)+)++++++++++*|)++++*+++((?(1)((0)\\g<0>)+)+++++++++())++*|)++++((?()0))|", "abcde", 5, 5); // #139
+  x2("((?()0+)+++(((0\\g<0>)0)|())++++((?(1)(0\\g<0>))++++++0*())++++((?(1)("
+     "0\\g<1>)+)++++++++++*())++++((?(1)((0)\\g<0>)+)++())+0++*+++(((0\\g<0>))*"
+     "())++++((?(1)(0\\g<0>)+)++++++++++*|)++++*+++((?(1)((0)\\g<0>)+)+++++++++"
+     "())++*|)++++((?()0))|",
+     "abcde", 5, 5); // #139
 
   n("(*FAIL)", "abcdefg");
-  n("abcd(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)", "abcdefg");
+  n("abcd(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)"
+    "(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*"
+    "FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*"
+    "FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*"
+    "FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*"
+    "FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)(*FAIL)",
+    "abcdefg");
   x2("(?:[ab]|(*MAX{2}).)*", "abcbaaccaaa", 11, 11);
   x2("(?:(*COUNT[AB]{X})[ab]|(*COUNT[CD]{X})[cd])*(*CMP{AB,<,CD})",
      "abababcdab", 7, 8);
   x2("(?(?{....})123|456)", "123", 0, 3);
   x2("(?(*FAIL)123|456)", "456", 0, 3);
 
-  x2("\\g'0'++{,0}",   "abcdefgh", 8, 8);
-  x2("\\g'0'++{,0}?",  "abcdefgh", 8, 8);
-  x2("\\g'0'++{,0}b",  "abcdefgh", 1, 2);
+  x2("\\g'0'++{,0}", "abcdefgh", 8, 8);
+  x2("\\g'0'++{,0}?", "abcdefgh", 8, 8);
+  x2("\\g'0'++{,0}b", "abcdefgh", 1, 2);
   x2("\\g'0'++{,0}?def", "abcdefgh", 3, 6);
   x2("a{1,3}?", "aaa", 2, 3);
   x2("a{3}", "aaa", 0, 3);
@@ -1219,7 +1246,7 @@ extern int main(int argc, char* argv[])
   x2("a{1,3}+", "aaaaaa", 5, 6);
   x2("a{3}+", "aaaaaa", 3, 6);
   x2("a{3,3}+", "aaaaaa", 3, 6);
-  n("a{2,3}?",  "a");
+  n("a{2,3}?", "a");
   n("a{3,2}a", "aaa");
   x2("a{3,2}b", "aaab", 1, 4);
   x2("a{3,2}b", "aaaab", 2, 5);
@@ -1276,14 +1303,21 @@ extern int main(int argc, char* argv[])
   x2("^..(?<=(a{,2}))\\1z", "aaz", 0, 3); // shortest priority
   e("(?<=(?~|zoo)a.*z)", "abcdefz", ONIGERR_INVALID_LOOK_BEHIND_PATTERN);
   e("(?<=(?~|)a.*z)", "abcdefz", ONIGERR_INVALID_LOOK_BEHIND_PATTERN);
-  e("(a(?~|boo)z){0}(?<=\\g<1>)", "abcdefz", ONIGERR_INVALID_LOOK_BEHIND_PATTERN);
+  e("(a(?~|boo)z){0}(?<=\\g<1>)", "abcdefz",
+    ONIGERR_INVALID_LOOK_BEHIND_PATTERN);
   x2("(?<=(?<= )| )", "abcde fg", 6, 6); // #173
-  x2("(?<=D|)(?<=@!nnnnnnnnnIIIIn;{1}D?()|<x@x*xxxD|)(?<=@xxx|xxxxx\\g<1>;{1}x)", "(?<=D|)(?<=@!nnnnnnnnnIIIIn;{1}D?()|<x@x*xxxD|)(?<=@xxx|xxxxx\\g<1>;{1}x)", 55, 55); // #173
+  x2("(?<=D|)(?<=@!nnnnnnnnnIIIIn;{1}D?()|<x@x*xxxD|)(?<=@xxx|xxxxx\\g<1>;{1}"
+     "x)",
+     "(?<=D|)(?<=@!nnnnnnnnnIIIIn;{1}D?()|<x@x*xxxD|)(?<=@xxx|xxxxx\\g<1>;{1}"
+     "x)",
+     55, 55);                      // #173
   x2("(?<=;()|)\\g<1>", "", 0, 0); // reduced #173
   x2("(?<=;()|)\\k<1>", ";", 1, 1);
   x2("(())\\g<3>{0}(?<=|())", "abc", 3, 3); // #175
   x2("(?<=()|)\\1{0}", "abc", 3, 3);
-  e("(?<!xxxxxxxxxxxxxxxxxxxxxxx{32774}{65521}xxxxxxxx{65521}xxxxxxxxxxxxxx{32774}xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)", "", ONIGERR_INVALID_LOOK_BEHIND_PATTERN); // #177
+  e("(?<!xxxxxxxxxxxxxxxxxxxxxxx{32774}{65521}xxxxxxxx{65521}xxxxxxxxxxxxxx{"
+    "32774}xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)",
+    "", ONIGERR_INVALID_LOOK_BEHIND_PATTERN); // #177
   x2("(?<=(?<=abc))def", "abcdef", 3, 6);
   x2("(?<=ab(?<=.+b)c)def", "abcdef", 3, 6);
   n("(?<=ab(?<=a+)c)def", "abcdef");
@@ -1344,48 +1378,48 @@ extern int main(int argc, char* argv[])
   x2("(?i)st", "st", 0, 2);
   x2("(?i)st", "St", 0, 2);
   x2("(?i)st", "sT", 0, 2);
-  x2("(?i)st", "\xC5\xBFt", 0, 3); // U+017F
+  x2("(?i)st", "\xC5\xBFt", 0, 3);    // U+017F
   x2("(?i)st", "\xEF\xAC\x85", 0, 3); // U+FB05
   x2("(?i)st", "\xEF\xAC\x86", 0, 3); // U+FB06
   x2("(?i)ast", "Ast", 0, 3);
   x2("(?i)ast", "ASt", 0, 3);
   x2("(?i)ast", "AsT", 0, 3);
-  x2("(?i)ast", "A\xC5\xBFt", 0, 4); // U+017F
+  x2("(?i)ast", "A\xC5\xBFt", 0, 4);    // U+017F
   x2("(?i)ast", "A\xEF\xAC\x85", 0, 4); // U+FB05
   x2("(?i)ast", "A\xEF\xAC\x86", 0, 4); // U+FB06
   x2("(?i)stZ", "stz", 0, 3);
   x2("(?i)stZ", "Stz", 0, 3);
   x2("(?i)stZ", "sTz", 0, 3);
-  x2("(?i)stZ", "\xC5\xBFtz", 0, 4); // U+017F
+  x2("(?i)stZ", "\xC5\xBFtz", 0, 4);    // U+017F
   x2("(?i)stZ", "\xEF\xAC\x85z", 0, 4); // U+FB05
   x2("(?i)stZ", "\xEF\xAC\x86z", 0, 4); // U+FB06
   x2("(?i)BstZ", "bstz", 0, 4);
   x2("(?i)BstZ", "bStz", 0, 4);
   x2("(?i)BstZ", "bsTz", 0, 4);
-  x2("(?i)BstZ", "b\xC5\xBFtz", 0, 5); // U+017F
-  x2("(?i)BstZ", "b\xEF\xAC\x85z", 0, 5); // U+FB05
-  x2("(?i)BstZ", "b\xEF\xAC\x86z", 0, 5); // U+FB06
-  x2("(?i).*st\\z", "tttssss\xC5\xBFt", 7, 10); // U+017F
-  x2("(?i).*st\\z", "tttssss\xEF\xAC\x85", 7, 10); // U+FB05
-  x2("(?i).*st\\z", "tttssss\xEF\xAC\x86", 7, 10); // U+FB06
-  x2("(?i).*あstい\\z", "tttssssあ\xC5\xBFtい", 7, 16); // U+017F
+  x2("(?i)BstZ", "b\xC5\xBFtz", 0, 5);                     // U+017F
+  x2("(?i)BstZ", "b\xEF\xAC\x85z", 0, 5);                  // U+FB05
+  x2("(?i)BstZ", "b\xEF\xAC\x86z", 0, 5);                  // U+FB06
+  x2("(?i).*st\\z", "tttssss\xC5\xBFt", 7, 10);            // U+017F
+  x2("(?i).*st\\z", "tttssss\xEF\xAC\x85", 7, 10);         // U+FB05
+  x2("(?i).*st\\z", "tttssss\xEF\xAC\x86", 7, 10);         // U+FB06
+  x2("(?i).*あstい\\z", "tttssssあ\xC5\xBFtい", 7, 16);    // U+017F
   x2("(?i).*あstい\\z", "tttssssあ\xEF\xAC\x85い", 7, 16); // U+FB05
   x2("(?i).*あstい\\z", "tttssssあ\xEF\xAC\x86い", 7, 16); // U+FB06
-  x2("(?i).*\xC5\xBFt\\z", "tttssssst", 7, 9); // U+017F
-  x2("(?i).*\xEF\xAC\x85\\z", "tttssssあst", 10, 12); // U+FB05
-  x2("(?i).*\xEF\xAC\x86い\\z", "tttssssstい", 7, 12); // U+FB06
+  x2("(?i).*\xC5\xBFt\\z", "tttssssst", 7, 9);             // U+017F
+  x2("(?i).*\xEF\xAC\x85\\z", "tttssssあst", 10, 12);      // U+FB05
+  x2("(?i).*\xEF\xAC\x86い\\z", "tttssssstい", 7, 12);     // U+FB06
   x2("(?i).*\xEF\xAC\x85\\z", "tttssssあ\xEF\xAC\x85", 10, 13);
 
-  x2("(?i).*ss", "abcdefghijklmnopqrstuvwxyz\xc3\x9f", 26, 28); // U+00DF
+  x2("(?i).*ss", "abcdefghijklmnopqrstuvwxyz\xc3\x9f", 26, 28);      // U+00DF
   x2("(?i).*ss.*", "abcdefghijklmnopqrstuvwxyz\xc3\x9fxyz", 26, 31); // U+00DF
-  x2("(?i).*\xc3\x9f", "abcdefghijklmnopqrstuvwxyzss", 26, 28); // U+00DF
+  x2("(?i).*\xc3\x9f", "abcdefghijklmnopqrstuvwxyzss", 26, 28);      // U+00DF
   x2("(?i).*ss.*", "abcdefghijklmnopqrstuvwxyzSSxyz", 26, 31);
 
   x2("(?i)ssv", "\xc3\x9fv", 0, 3); // U+00DF
   x2("(?i)(?<=ss)v", "SSv", 2, 3);
   x2("(?i)(?<=\xc3\x9f)v", "\xc3\x9fv", 2, 3);
-  //x2("(?i)(?<=\xc3\x9f)v", "ssv", 2, 3);
-  //x2("(?i)(?<=ss)v", "\xc3\x9fv", 2, 3);
+  // x2("(?i)(?<=\xc3\x9f)v", "ssv", 2, 3);
+  // x2("(?i)(?<=ss)v", "\xc3\x9fv", 2, 3);
 
   /* #156 U+01F0 (UTF-8: C7 B0) */
   x2("(?i).+Isssǰ", ".+Isssǰ", 1, 8);
@@ -1401,7 +1435,7 @@ extern int main(int argc, char* argv[])
   x2("(?i)j\xcc\x8cv", "ǰV", 0, 3);
   x2("(?i)[ǰ]", "ǰ", 0, 2);
   x2("(?i)[ǰ]", "j\xcc\x8c", 0, 3);
-  //x2("(?i)[j]\xcc\x8c", "ǰ", 0, 2);
+  // x2("(?i)[j]\xcc\x8c", "ǰ", 0, 2);
   x2("(?i)\ufb00a", "ffa", 0, 3);
   x2("(?i)ffz", "\xef\xac\x80z", 0, 4);
   x2("(?i)\u2126", "\xcf\x89", 0, 2);
@@ -1410,21 +1444,29 @@ extern int main(int argc, char* argv[])
   x2("(?i)A\u2126=", "a\xcf\x89=", 0, 4);
   x2("(?i:ss)=1234567890", "\xc5\xbf\xc5\xbf=1234567890", 0, 15);
 
-  n("a(b|)+d", "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcd"); /* https://www.haijin-boys.com/discussions/5079 */
+  n("a(b|)+d", "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcd"); /* https://www.haijin-boys.com/discussions/5079
+                                                      */
   n("   \xfd", ""); /* https://bugs.php.net/bug.php?id=77370 */
-  /* can't use \xfc00.. because compiler error: hex escape sequence out of range */
-  n("()0\\xfc00000\\xfc00000\\xfc00000\xfc", ""); /* https://bugs.php.net/bug.php?id=77371 */
+  /* can't use \xfc00.. because compiler error: hex escape sequence out of range
+   */
+  n("()0\\xfc00000\\xfc00000\\xfc00000\xfc",
+    ""); /* https://bugs.php.net/bug.php?id=77371 */
   x2("000||0\xfa", "0", 1, 1);
-  e("(?i)000000000000000000000\xf0", "", ONIGERR_INVALID_CODE_POINT_VALUE); /* https://bugs.php.net/bug.php?id=77382 */
+  e("(?i)000000000000000000000\xf0", "",
+    ONIGERR_INVALID_CODE_POINT_VALUE); /* https://bugs.php.net/bug.php?id=77382
+                                        */
   n("0000\\\xf5", "0"); /* https://bugs.php.net/bug.php?id=77385 */
-  n("(?i)FFF00000000000000000\xfd", ""); /* https://bugs.php.net/bug.php?id=77394 */
+  n("(?i)FFF00000000000000000\xfd",
+    ""); /* https://bugs.php.net/bug.php?id=77394 */
   e("x{55380}{77590}", "", ONIGERR_TOO_BIG_NUMBER_FOR_REPEAT_RANGE);
-  e("(xyz){40000}{99999}(?<name>vv)", "", ONIGERR_TOO_BIG_NUMBER_FOR_REPEAT_RANGE);
+  e("(xyz){40000}{99999}(?<name>vv)", "",
+    ONIGERR_TOO_BIG_NUMBER_FOR_REPEAT_RANGE);
   e("f{90000,90000}{80000,80000}", "", ONIGERR_TOO_BIG_NUMBER_FOR_REPEAT_RANGE);
   n("f{90000,90000}{80000,80001}", "");
 
-  x2("\\p{Common}", "\xe3\x8b\xbf", 0, 3);   /* U+32FF */
-  x2("\\p{In_Enclosed_CJK_Letters_and_Months}", "\xe3\x8b\xbf", 0, 3); /* U+32FF */
+  x2("\\p{Common}", "\xe3\x8b\xbf", 0, 3); /* U+32FF */
+  x2("\\p{In_Enclosed_CJK_Letters_and_Months}", "\xe3\x8b\xbf", 0,
+     3); /* U+32FF */
 
   e("\\x{7fffffff}", "", ONIGERR_INVALID_CODE_POINT_VALUE);
   e("[\\x{7fffffff}]", "", ONIGERR_INVALID_CODE_POINT_VALUE);
@@ -1439,9 +1481,10 @@ extern int main(int argc, char* argv[])
   x2("(?:)*", "abc", 3, 3);
   e("^*", "abc", ONIGERR_TARGET_OF_REPEAT_OPERATOR_INVALID);
 
-  fprintf(stdout,
-       "\nRESULT   SUCC: %4d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
-       nsucc, nfail, nerror, onig_version());
+  fprintf(
+      stdout,
+      "\nRESULT   SUCC: %4d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
+      nsucc, nfail, nerror, onig_version());
 
   onig_region_free(region, 1);
   onig_end();

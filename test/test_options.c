@@ -11,104 +11,95 @@
 
 #include <string.h>
 
-#define SLEN(s)  strlen(s)
+#define SLEN(s) strlen(s)
 
-static int nsucc  = 0;
-static int nfail  = 0;
+static int nsucc = 0;
+static int nfail = 0;
 static int nerror = 0;
 
 #ifdef __TRUSTINSOFT_ANALYZER__
 static int nall = 0;
 #endif
 
-static FILE* err_file;
+static FILE *err_file;
 
-static OnigRegion* region;
+static OnigRegion *region;
 
-static void xx(OnigOptionType options, char* pattern, char* str,
-               int from, int to, int mem, int not, int error_no, int line_no)
-{
+static void xx(OnigOptionType options, char *pattern, char *str, int from,
+               int to, int mem, int not, int error_no, int line_no) {
 #ifdef __TRUSTINSOFT_ANALYZER__
-  if (nall++ % TIS_TEST_CHOOSE_MAX != TIS_TEST_CHOOSE_CURRENT) return;
+  if (nall++ % TIS_TEST_CHOOSE_MAX != TIS_TEST_CHOOSE_CURRENT)
+    return;
 #endif
 
   int r;
-  regex_t* reg;
+  regex_t *reg;
   OnigErrorInfo einfo;
 
-  r = onig_new(&reg, (UChar* )pattern, (UChar* )(pattern + SLEN(pattern)),
-         options, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT, &einfo);
+  r = onig_new(&reg, (UChar *)pattern, (UChar *)(pattern + SLEN(pattern)),
+               options, ONIG_ENCODING_UTF8, ONIG_SYNTAX_DEFAULT, &einfo);
   if (r) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
 
     if (error_no == 0) {
-      onig_error_code_to_str((UChar* )s, r, &einfo);
+      onig_error_code_to_str((UChar *)s, r, &einfo);
       fprintf(err_file, "ERROR: %s  /%s/  #%d\n", s, pattern, line_no);
       nerror++;
-    }
-    else {
+    } else {
       if (r == error_no) {
         fprintf(stdout, "OK(ERROR): /%s/ %d  #%d\n", pattern, r, line_no);
         nsucc++;
-      }
-      else {
+      } else {
         fprintf(stdout, "FAIL(ERROR): /%s/ '%s', %d, %d  #%d\n", pattern, str,
                 error_no, r, line_no);
         nfail++;
       }
     }
 
-    return ;
+    return;
   }
 
-  r = onig_search(reg, (UChar* )str, (UChar* )(str + SLEN(str)),
-                  (UChar* )str, (UChar* )(str + SLEN(str)),
-                  region, options);
+  r = onig_search(reg, (UChar *)str, (UChar *)(str + SLEN(str)), (UChar *)str,
+                  (UChar *)(str + SLEN(str)), region, options);
   if (r < ONIG_MISMATCH) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
 
     if (error_no == 0) {
-      onig_error_code_to_str((UChar* )s, r);
+      onig_error_code_to_str((UChar *)s, r);
       fprintf(err_file, "ERROR: %s  /%s/  #%d\n", s, pattern, line_no);
       nerror++;
-    }
-    else {
+    } else {
       if (r == error_no) {
-        fprintf(stdout, "OK(ERROR): /%s/ '%s', %d  #%d\n",
-                pattern, str, r, line_no);
+        fprintf(stdout, "OK(ERROR): /%s/ '%s', %d  #%d\n", pattern, str, r,
+                line_no);
         nsucc++;
-      }
-      else {
-        fprintf(stdout, "FAIL ERROR NO: /%s/ '%s', %d, %d  #%d\n",
-                pattern, str, error_no, r, line_no);
+      } else {
+        fprintf(stdout, "FAIL ERROR NO: /%s/ '%s', %d, %d  #%d\n", pattern, str,
+                error_no, r, line_no);
         nfail++;
       }
     }
 
-    return ;
+    return;
   }
 
   if (r == ONIG_MISMATCH) {
-    if (not) {
+    if (not ) {
       fprintf(stdout, "OK(N): /%s/ '%s'  #%d\n", pattern, str, line_no);
       nsucc++;
-    }
-    else {
+    } else {
       fprintf(stdout, "FAIL: /%s/ '%s'  #%d\n", pattern, str, line_no);
       nfail++;
     }
-  }
-  else {
-    if (not) {
+  } else {
+    if (not ) {
       fprintf(stdout, "FAIL(N): /%s/ '%s'  #%d\n", pattern, str, line_no);
       nfail++;
-    }
-    else {
+    } else {
       if (region->beg[mem] == from && region->end[mem] == to) {
         fprintf(stdout, "OK: /%s/ '%s'  #%d\n", pattern, str, line_no);
         nsucc++;
-      }
-      else {
+      } else {
         fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d  #%d\n", pattern, str,
                 from, to, region->beg[mem], region->end[mem], line_no);
         nfail++;
@@ -118,20 +109,17 @@ static void xx(OnigOptionType options, char* pattern, char* str,
   onig_free(reg);
 }
 
-static void xx2(OnigOptionType options, char* pattern, char* str,
-                int from, int to, int line_no)
-{
+static void xx2(OnigOptionType options, char *pattern, char *str, int from,
+                int to, int line_no) {
   xx(options, pattern, str, from, to, 0, 0, 0, line_no);
 }
 
-static void xx3(OnigOptionType options, char* pattern, char* str,
-                int from, int to, int mem, int line_no)
-{
+static void xx3(OnigOptionType options, char *pattern, char *str, int from,
+                int to, int mem, int line_no) {
   xx(options, pattern, str, from, to, mem, 0, 0, line_no);
 }
 
-static void xn(OnigOptionType options, char* pattern, char* str, int line_no)
-{
+static void xn(OnigOptionType options, char *pattern, char *str, int line_no) {
   xx(options, pattern, str, 0, 0, 0, 1, 0, line_no);
 }
 
@@ -143,19 +131,18 @@ static void xe(OnigOptionType options, char* pattern, char* str,
 }
 #endif
 
-#define x2(o,p,s,f,t)    xx2(o,p,s,f,t, __LINE__)
-#define x3(o,p,s,f,t,m)  xx3(o,p,s,f,t,m, __LINE__)
-#define n(o,p,s)          xn(o,p,s,   __LINE__)
-#define e(o,p,s,en)       xe(o,p,s,en, __LINE__)
+#define x2(o, p, s, f, t) xx2(o, p, s, f, t, __LINE__)
+#define x3(o, p, s, f, t, m) xx3(o, p, s, f, t, m, __LINE__)
+#define n(o, p, s) xn(o, p, s, __LINE__)
+#define e(o, p, s, en) xe(o, p, s, en, __LINE__)
 
-#define OIA  (ONIG_OPTION_IGNORECASE | ONIG_OPTION_IGNORECASE_IS_ASCII)
+#define OIA (ONIG_OPTION_IGNORECASE | ONIG_OPTION_IGNORECASE_IS_ASCII)
 
-extern int main(int argc, char* argv[])
-{
+extern int main(int argc, char *argv[]) {
   OnigEncoding use_encs[1];
 
   use_encs[0] = ONIG_ENCODING_UTF8;
-  onig_initialize(use_encs, sizeof(use_encs)/sizeof(use_encs[0]));
+  onig_initialize(use_encs, sizeof(use_encs) / sizeof(use_encs[0]));
 
   err_file = stdout;
 
@@ -217,10 +204,10 @@ extern int main(int argc, char* argv[])
   x2(ONIG_OPTION_FIND_LONGEST, "\\w+", "abc defg hij", 4, 8);
   x2(ONIG_OPTION_FIND_NOT_EMPTY, "\\w*", "@@@ abc defg hij", 4, 7);
 
-
-  fprintf(stdout,
-       "\nRESULT   SUCC: %4d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
-       nsucc, nfail, nerror, onig_version());
+  fprintf(
+      stdout,
+      "\nRESULT   SUCC: %4d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
+      nsucc, nfail, nerror, onig_version());
 
   onig_region_free(region, 1);
   onig_end();

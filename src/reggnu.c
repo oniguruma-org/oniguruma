@@ -27,96 +27,75 @@
  * SUCH DAMAGE.
  */
 
-#include "regint.h"
 #include "oniggnu.h"
+#include "regint.h"
 
-extern void
-re_free_registers(OnigRegion* r)
-{
+extern void re_free_registers(OnigRegion *r) {
   /* 0: don't free self */
   onig_region_free(r, 0);
 }
 
-extern int
-re_adjust_startpos(regex_t* reg, const char* string, int size,
-                   int startpos, int range)
-{
+extern int re_adjust_startpos(regex_t *reg, const char *string, int size,
+                              int startpos, int range) {
   if (startpos > 0 && ONIGENC_MBC_MAXLEN(reg->enc) != 1 && startpos < size) {
     UChar *p;
-    UChar *s = (UChar* )string + startpos;
+    UChar *s = (UChar *)string + startpos;
 
     if (range > 0) {
-      p = onigenc_get_right_adjust_char_head(reg->enc, (UChar* )string, s);
+      p = onigenc_get_right_adjust_char_head(reg->enc, (UChar *)string, s);
+    } else {
+      p = ONIGENC_LEFT_ADJUST_CHAR_HEAD(reg->enc, (UChar *)string, s);
     }
-    else {
-      p = ONIGENC_LEFT_ADJUST_CHAR_HEAD(reg->enc, (UChar* )string, s);
-    }
-    return (int )(p - (UChar* )string);
+    return (int)(p - (UChar *)string);
   }
 
   return startpos;
 }
 
-extern int
-re_match(regex_t* reg, const char* str, int size, int pos,
-         struct re_registers* regs)
-{
-  return onig_match(reg, (UChar* )str, (UChar* )(str + size),
-                    (UChar* )(str + pos), regs, ONIG_OPTION_NONE);
+extern int re_match(regex_t *reg, const char *str, int size, int pos,
+                    struct re_registers *regs) {
+  return onig_match(reg, (UChar *)str, (UChar *)(str + size),
+                    (UChar *)(str + pos), regs, ONIG_OPTION_NONE);
 }
 
-extern int
-re_search(regex_t* bufp, const char* string, int size, int startpos, int range,
-          struct re_registers* regs)
-{
-  return onig_search(bufp, (UChar* )string, (UChar* )(string + size),
-                     (UChar* )(string + startpos),
-                     (UChar* )(string + startpos + range),
-                     regs, ONIG_OPTION_NONE);
+extern int re_search(regex_t *bufp, const char *string, int size, int startpos,
+                     int range, struct re_registers *regs) {
+  return onig_search(bufp, (UChar *)string, (UChar *)(string + size),
+                     (UChar *)(string + startpos),
+                     (UChar *)(string + startpos + range), regs,
+                     ONIG_OPTION_NONE);
 }
 
-extern int
-re_compile_pattern(const char* pattern, int size, regex_t* reg, char* ebuf)
-{
+extern int re_compile_pattern(const char *pattern, int size, regex_t *reg,
+                              char *ebuf) {
   int r;
   OnigErrorInfo einfo;
 
-  r = onig_compile(reg, (UChar* )pattern, (UChar* )(pattern + size), &einfo);
+  r = onig_compile(reg, (UChar *)pattern, (UChar *)(pattern + size), &einfo);
   if (r != ONIG_NORMAL) {
     if (IS_NOT_NULL(ebuf))
-      (void )onig_error_code_to_str((UChar* )ebuf, r, &einfo);
+      (void)onig_error_code_to_str((UChar *)ebuf, r, &einfo);
   }
 
   return r;
 }
 
-extern void
-re_free_pattern(regex_t* reg)
-{
-  onig_free(reg);
+extern void re_free_pattern(regex_t *reg) { onig_free(reg); }
+
+extern int re_alloc_pattern(regex_t **reg) {
+  *reg = (regex_t *)xmalloc(sizeof(regex_t));
+  if (IS_NULL(*reg))
+    return ONIGERR_MEMORY;
+
+  return onig_reg_init(*reg, ONIG_OPTION_DEFAULT, ONIGENC_CASE_FOLD_DEFAULT,
+                       OnigEncDefaultCharEncoding, OnigDefaultSyntax);
 }
 
-extern int
-re_alloc_pattern(regex_t** reg)
-{
-  *reg = (regex_t* )xmalloc(sizeof(regex_t));
-  if (IS_NULL(*reg)) return ONIGERR_MEMORY;
-
-  return onig_reg_init(*reg, ONIG_OPTION_DEFAULT,
-                       ONIGENC_CASE_FOLD_DEFAULT,
-                       OnigEncDefaultCharEncoding,
-                       OnigDefaultSyntax);
+extern void re_set_casetable(const char *table) {
+  onigenc_set_default_caseconv_table((UChar *)table);
 }
 
-extern void
-re_set_casetable(const char* table)
-{
-  onigenc_set_default_caseconv_table((UChar* )table);
-}
-
-extern void
-re_mbcinit(int mb_code)
-{
+extern void re_mbcinit(int mb_code) {
   OnigEncoding enc;
 
   switch (mb_code) {
@@ -133,7 +112,7 @@ re_mbcinit(int mb_code)
     enc = ONIG_ENCODING_UTF8;
     break;
   default:
-    return ;
+    return;
     break;
   }
 

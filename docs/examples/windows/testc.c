@@ -14,20 +14,19 @@
 
 #include <string.h>
 
-#define SLEN(s)  strlen(s)
+#define SLEN(s) strlen(s)
 
-static int nsucc  = 0;
-static int nfail  = 0;
+static int nsucc = 0;
+static int nfail = 0;
 static int nerror = 0;
 
-static FILE* err_file;
+static FILE *err_file;
 
 #ifndef POSIX_TEST
-static OnigRegion* region;
+static OnigRegion *region;
 #endif
 
-static void xx(char* pattern, char* str, int from, int to, int mem, int not)
-{
+static void xx(char *pattern, char *str, int from, int to, int mem, int not ) {
   int r;
 
 #ifdef POSIX_TEST
@@ -40,7 +39,7 @@ static void xx(char* pattern, char* str, int from, int to, int mem, int not)
     regerror(r, &reg, buf, sizeof(buf));
     fprintf(err_file, "ERROR: %s\n", buf);
     nerror++;
-    return ;
+    return;
   }
 
   r = regexec(&reg, str, reg.re_nsub + 1, pmatch, 0);
@@ -48,32 +47,28 @@ static void xx(char* pattern, char* str, int from, int to, int mem, int not)
     regerror(r, &reg, buf, sizeof(buf));
     fprintf(err_file, "ERROR: %s\n", buf);
     nerror++;
-    return ;
+    return;
   }
 
   if (r == REG_NOMATCH) {
-    if (not) {
+    if (not ) {
       fprintf(stdout, "OK(N): /%s/ '%s'\n", pattern, str);
       nsucc++;
-    }
-    else {
+    } else {
       fprintf(stdout, "FAIL: /%s/ '%s'\n", pattern, str);
       nfail++;
     }
-  }
-  else {
-    if (not) {
+  } else {
+    if (not ) {
       fprintf(stdout, "FAIL(N): /%s/ '%s'\n", pattern, str);
       nfail++;
-    }
-    else {
+    } else {
       if (pmatch[mem].rm_so == from && pmatch[mem].rm_eo == to) {
         fprintf(stdout, "OK: /%s/ '%s'\n", pattern, str);
         nsucc++;
-      }
-      else {
-        fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d\n", pattern, str,
-                from, to, pmatch[mem].rm_so, pmatch[mem].rm_eo);
+      } else {
+        fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d\n", pattern, str, from,
+                to, pmatch[mem].rm_so, pmatch[mem].rm_eo);
         nfail++;
       }
     }
@@ -81,53 +76,49 @@ static void xx(char* pattern, char* str, int from, int to, int mem, int not)
   regfree(&reg);
 
 #else
-  regex_t* reg;
+  regex_t *reg;
   OnigErrorInfo einfo;
 
-  r = onig_new(&reg, (UChar* )pattern, (UChar* )(pattern + SLEN(pattern)),
-         ONIG_OPTION_DEFAULT, ONIG_ENCODING_SJIS, ONIG_SYNTAX_DEFAULT, &einfo);
+  r = onig_new(&reg, (UChar *)pattern, (UChar *)(pattern + SLEN(pattern)),
+               ONIG_OPTION_DEFAULT, ONIG_ENCODING_SJIS, ONIG_SYNTAX_DEFAULT,
+               &einfo);
   if (r) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
-    onig_error_code_to_str((UChar* )s, r, &einfo);
+    onig_error_code_to_str((UChar *)s, r, &einfo);
     fprintf(err_file, "ERROR: %s\n", s);
     nerror++;
-    return ;
+    return;
   }
 
-  r = onig_search(reg, (UChar* )str, (UChar* )(str + SLEN(str)),
-                  (UChar* )str, (UChar* )(str + SLEN(str)),
-                  region, ONIG_OPTION_NONE);
+  r = onig_search(reg, (UChar *)str, (UChar *)(str + SLEN(str)), (UChar *)str,
+                  (UChar *)(str + SLEN(str)), region, ONIG_OPTION_NONE);
   if (r < ONIG_MISMATCH) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
-    onig_error_code_to_str((UChar* )s, r);
+    onig_error_code_to_str((UChar *)s, r);
     fprintf(err_file, "ERROR: %s\n", s);
     nerror++;
-    return ;
+    return;
   }
 
   if (r == ONIG_MISMATCH) {
-    if (not) {
+    if (not ) {
       fprintf(stdout, "OK(N): /%s/ '%s'\n", pattern, str);
       nsucc++;
-    }
-    else {
+    } else {
       fprintf(stdout, "FAIL: /%s/ '%s'\n", pattern, str);
       nfail++;
     }
-  }
-  else {
-    if (not) {
+  } else {
+    if (not ) {
       fprintf(stdout, "FAIL(N): /%s/ '%s'\n", pattern, str);
       nfail++;
-    }
-    else {
+    } else {
       if (region->beg[mem] == from && region->end[mem] == to) {
         fprintf(stdout, "OK: /%s/ '%s'\n", pattern, str);
         nsucc++;
-      }
-      else {
-        fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d\n", pattern, str,
-                from, to, region->beg[mem], region->end[mem]);
+      } else {
+        fprintf(stdout, "FAIL: /%s/ '%s' %d-%d : %d-%d\n", pattern, str, from,
+                to, region->beg[mem], region->end[mem]);
         nfail++;
       }
     }
@@ -136,28 +127,22 @@ static void xx(char* pattern, char* str, int from, int to, int mem, int not)
 #endif
 }
 
-static void x2(char* pattern, char* str, int from, int to)
-{
+static void x2(char *pattern, char *str, int from, int to) {
   xx(pattern, str, from, to, 0, 0);
 }
 
-static void x3(char* pattern, char* str, int from, int to, int mem)
-{
+static void x3(char *pattern, char *str, int from, int to, int mem) {
   xx(pattern, str, from, to, mem, 0);
 }
 
-static void n(char* pattern, char* str)
-{
-  xx(pattern, str, 0, 0, 0, 1);
-}
+static void n(char *pattern, char *str) { xx(pattern, str, 0, 0, 0, 1); }
 
-extern int main(int argc, char* argv[])
-{
+extern int main(int argc, char *argv[]) {
 #ifndef POSIX_TEST
   static OnigEncoding use_encs[1];
 
   use_encs[0] = ONIG_ENCODING_SJIS;
-  onig_initialize(use_encs, sizeof(use_encs)/sizeof(use_encs[0]));
+  onig_initialize(use_encs, sizeof(use_encs) / sizeof(use_encs[0]));
 #endif
 
   err_file = stdout;
@@ -185,7 +170,8 @@ extern int main(int argc, char* argv[])
   x2("\\x61", "a", 0, 1);
   x2("aa", "aa", 0, 2);
   x2("aaa", "aaa", 0, 3);
-  x2("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0, 35);
+  x2("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0, 35);
   x2("ab", "ab", 0, 2);
   x2("b", "ab", 1, 2);
   x2("bc", "abc", 1, 3);
@@ -241,7 +227,8 @@ extern int main(int argc, char* argv[])
   x2("[\\x5a-\\x5c]", "\x5b", 0, 1);
   x2("[\\x6A-\\x6D]", "\x6c", 0, 1);
   n("[\\x6A-\\x6D]", "\x6E");
-  n("^[0-9A-F]+ 0+ UNDEF ", "75F 00000000 SECT14A notype ()    External    | _rb_apply");
+  n("^[0-9A-F]+ 0+ UNDEF ",
+    "75F 00000000 SECT14A notype ()    External    | _rb_apply");
   x2("[\\[]", "[", 0, 1);
   x2("[\\]]", "]", 0, 1);
   x2("[&]", "&", 0, 1);
@@ -556,16 +543,29 @@ extern int main(int argc, char* argv[])
   x2("(?:(?<x>)|(?<x>efg))\\k<x>", "", 0, 0);
   x2("(?:(?<x>abc)|(?<x>efg))\\k<x>", "abcefgefg", 3, 9);
   n("(?:(?<x>abc)|(?<x>efg))\\k<x>", "abcefg");
-  x2("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|(?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>...........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............))\\k<n1>$", "a-pyumpyum", 2, 10);
-  x3("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|(?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>...........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............))\\k<n1>$", "xxxxabcdefghijklmnabcdefghijklmn", 4, 18, 14);
-  x3("(?<name1>)(?<name2>)(?<name3>)(?<name4>)(?<name5>)(?<name6>)(?<name7>)(?<name8>)(?<name9>)(?<name10>)(?<name11>)(?<name12>)(?<name13>)(?<name14>)(?<name15>)(?<name16>aaa)(?<name17>)$", "aaa", 0, 3, 16);
+  x2("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|("
+     "?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>.."
+     ".........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............)"
+     ")\\k<n1>$",
+     "a-pyumpyum", 2, 10);
+  x3("(?:(?<n1>.)|(?<n1>..)|(?<n1>...)|(?<n1>....)|(?<n1>.....)|(?<n1>......)|("
+     "?<n1>.......)|(?<n1>........)|(?<n1>.........)|(?<n1>..........)|(?<n1>.."
+     ".........)|(?<n1>............)|(?<n1>.............)|(?<n1>..............)"
+     ")\\k<n1>$",
+     "xxxxabcdefghijklmnabcdefghijklmn", 4, 18, 14);
+  x3("(?<name1>)(?<name2>)(?<name3>)(?<name4>)(?<name5>)(?<name6>)(?<name7>)(?<"
+     "name8>)(?<name9>)(?<name10>)(?<name11>)(?<name12>)(?<name13>)(?<name14>)("
+     "?<name15>)(?<name16>aaa)(?<name17>)$",
+     "aaa", 0, 3, 16);
   x2("(?<foo>a|\\(\\g<foo>\\))", "a", 0, 1);
   x2("(?<foo>a|\\(\\g<foo>\\))", "((((((a))))))", 0, 13);
   x3("(?<foo>a|\\(\\g<foo>\\))", "((((((((a))))))))", 0, 17, 1);
   x2("\\g<bar>|\\zEND(?<bar>.*abc$)", "abcxxxabc", 0, 9);
   x2("\\g<1>|\\zEND(.a.)", "bac", 0, 3);
   x3("\\g<_A>\\g<_A>|\\zEND(.a.)(?<_A>.b.)", "xbxyby", 3, 6, 1);
-  x2("\\A(?:\\g<pon>|\\g<pan>|\\zEND  (?<pan>a|c\\g<pon>c)(?<pon>b|d\\g<pan>d))$", "cdcbcdc", 0, 7);
+  x2("\\A(?:\\g<pon>|\\g<pan>|\\zEND  "
+     "(?<pan>a|c\\g<pon>c)(?<pon>b|d\\g<pan>d))$",
+     "cdcbcdc", 0, 7);
   x2("\\A(?<n>|a\\g<m>)\\z|\\zEND (?<m>\\g<n>)", "aaaa", 0, 4);
   x2("(?<n>(a|b\\g<n>c){3,5})", "baaaaca", 1, 5);
   x2("(?<n>(a|b\\g<n>c){3,5})", "baaaacaaaaa", 0, 10);
@@ -583,7 +583,9 @@ extern int main(int argc, char* argv[])
   n("い", "あ");
   x2("うう", "うう", 0, 4);
   x2("あいう", "あいう", 0, 6);
-  x2("こここここここここここここここここここここここここここここここここここ", "こここここここここここここここここここここここここここここここここここ", 0, 70);
+  x2("こここここここここここここここここここここここここここここここここここ",
+     "こここここここここここここここここここここここここここここここここここ",
+     0, 70);
   x2("あ", "いあ", 2, 4);
   x2("いう", "あいう", 2, 6);
   x2("\\xca\\xb8", "\xca\xb8", 0, 2);
@@ -666,7 +668,8 @@ extern int main(int argc, char* argv[])
   x2("を(?:かき|きく)け", "をきくけ", 0, 8);
   x2("あい|(?:あう|あを)", "あを", 0, 4);
   x2("あ|い|う", "えう", 2, 4);
-  x2("あ|い|うえ|おかき|く|けこさ|しすせ|そ|たち|つてとなに|ぬね", "しすせ", 0, 6);
+  x2("あ|い|うえ|おかき|く|けこさ|しすせ|そ|たち|つてとなに|ぬね", "しすせ", 0,
+     6);
   n("あ|い|うえ|おかき|く|けこさ|しすせ|そ|たち|つてとなに|ぬね", "すせ");
   x2("あ|^わ", "ぶあ", 2, 4);
   x2("あ|^を", "をあ", 0, 2);
@@ -827,7 +830,9 @@ extern int main(int argc, char* argv[])
   x3("(.(..\\d.)\\2)", "あ12341234", 0, 10, 1);
   x2("((?i:あvず))\\1", "あvずあvず", 0, 10);
   x2("(?<愚か>変|\\(\\g<愚か>\\))", "((((((変))))))", 0, 14);
-  x2("\\A(?:\\g<阿_1>|\\g<云_2>|\\z終了  (?<阿_1>観|自\\g<云_2>自)(?<云_2>在|菩薩\\g<阿_1>菩薩))$", "菩薩自菩薩自在自菩薩自菩薩", 0, 26);
+  x2("\\A(?:\\g<阿_1>|\\g<云_2>|\\z終了  "
+     "(?<阿_1>観|自\\g<云_2>自)(?<云_2>在|菩薩\\g<阿_1>菩薩))$",
+     "菩薩自菩薩自在自菩薩自菩薩", 0, 26);
   x2("[[ひふ]]", "ふ", 0, 2);
   x2("[[いおう]か]", "か", 0, 2);
   n("[[^あ]]", "あ");
@@ -850,11 +855,13 @@ extern int main(int argc, char* argv[])
   x2("[^[^a-zあいう]&&[^bcdefgうえお]g-w]", "f", 0, 1);
   x2("[^[^a-zあいう]&&[^bcdefgうえお]g-w]", "g", 0, 1);
   n("[^[^a-zあいう]&&[^bcdefgうえお]g-w]", "2");
-  x2("a<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>", 0, 32);
-  x2(".<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>", 0, 32);
+  x2("a<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>",
+     0, 32);
+  x2(".<b>バージョンのダウンロード<\\/b>", "a<b>バージョンのダウンロード</b>",
+     0, 32);
   fprintf(stdout,
-       "\nRESULT   SUCC: %d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
-       nsucc, nfail, nerror, onig_version());
+          "\nRESULT   SUCC: %d,  FAIL: %d,  ERROR: %d      (by Oniguruma %s)\n",
+          nsucc, nfail, nerror, onig_version());
 
 #ifndef POSIX_TEST
   onig_region_free(region, 1);

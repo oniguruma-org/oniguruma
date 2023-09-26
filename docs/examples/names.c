@@ -1,18 +1,16 @@
 /*
  * names.c -- example of group name callback.
  */
+#include "oniguruma.h"
 #include <stdio.h>
 #include <string.h>
-#include "oniguruma.h"
 
-static int
-name_callback(const UChar* name, const UChar* name_end,
-              int ngroup_num, int* group_nums,
-              regex_t* reg, void* arg)
-{
+static int name_callback(const UChar *name, const UChar *name_end,
+                         int ngroup_num, int *group_nums, regex_t *reg,
+                         void *arg) {
   int i, gn, ref;
-  char* s;
-  OnigRegion *region = (OnigRegion* )arg;
+  char *s;
+  OnigRegion *region = (OnigRegion *)arg;
 
   for (i = 0; i < ngroup_num; i++) {
     gn = group_nums[i];
@@ -21,29 +19,29 @@ name_callback(const UChar* name, const UChar* name_end,
     fprintf(stderr, "%s (%d): ", name, gn);
     fprintf(stderr, "(%d-%d) %s\n", region->beg[gn], region->end[gn], s);
   }
-  return 0;  /* 0: continue */
+  return 0; /* 0: continue */
 }
 
-extern int main(int argc, char* argv[])
-{
+extern int main(int argc, char *argv[]) {
   int r;
   unsigned char *start, *range, *end;
-  regex_t* reg;
+  regex_t *reg;
   OnigErrorInfo einfo;
   OnigRegion *region;
   OnigEncoding use_encs[1];
 
-  static UChar* pattern = (UChar* )"(?<foo>a*)(?<bar>b*)(?<foo>c*)";
-  static UChar* str = (UChar* )"aaabbbbcc";
+  static UChar *pattern = (UChar *)"(?<foo>a*)(?<bar>b*)(?<foo>c*)";
+  static UChar *str = (UChar *)"aaabbbbcc";
 
   use_encs[0] = ONIG_ENCODING_ASCII;
-  onig_initialize(use_encs, sizeof(use_encs)/sizeof(use_encs[0]));
+  onig_initialize(use_encs, sizeof(use_encs) / sizeof(use_encs[0]));
 
-  r = onig_new(&reg, pattern, pattern + strlen((char* )pattern),
-        ONIG_OPTION_DEFAULT, ONIG_ENCODING_ASCII, ONIG_SYNTAX_DEFAULT, &einfo);
+  r = onig_new(&reg, pattern, pattern + strlen((char *)pattern),
+               ONIG_OPTION_DEFAULT, ONIG_ENCODING_ASCII, ONIG_SYNTAX_DEFAULT,
+               &einfo);
   if (r != ONIG_NORMAL) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
-    onig_error_code_to_str((UChar* )s, r, &einfo);
+    onig_error_code_to_str((UChar *)s, r, &einfo);
     fprintf(stderr, "ERROR: %s\n", s);
     return -1;
   }
@@ -52,20 +50,18 @@ extern int main(int argc, char* argv[])
 
   region = onig_region_new();
 
-  end   = str + strlen((char* )str);
+  end = str + strlen((char *)str);
   start = str;
   range = end;
   r = onig_search(reg, str, end, start, range, region, ONIG_OPTION_NONE);
   if (r >= 0) {
     fprintf(stderr, "match at %d\n\n", r);
-    r = onig_foreach_name(reg, name_callback, (void* )region);
-  }
-  else if (r == ONIG_MISMATCH) {
+    r = onig_foreach_name(reg, name_callback, (void *)region);
+  } else if (r == ONIG_MISMATCH) {
     fprintf(stderr, "search fail\n");
-  }
-  else { /* error */
+  } else { /* error */
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
-    onig_error_code_to_str((UChar* )s, r);
+    onig_error_code_to_str((UChar *)s, r);
     onig_region_free(region, 1 /* 1:free self, 0:free contents only */);
     onig_free(reg);
     onig_end();

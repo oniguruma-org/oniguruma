@@ -1,32 +1,31 @@
 /*
  * syntax.c
  */
+#include "oniguruma.h"
 #include <stdio.h>
 #include <string.h>
-#include "oniguruma.h"
 
-extern int exec(OnigSyntaxType* syntax, char* apattern, char* astr)
-{
+extern int exec(OnigSyntaxType *syntax, char *apattern, char *astr) {
   int r;
   unsigned char *start, *range, *end;
-  regex_t* reg;
+  regex_t *reg;
   OnigErrorInfo einfo;
   OnigRegion *region;
-  UChar* pattern = (UChar* )apattern;
-  UChar* str     = (UChar* )astr;
+  UChar *pattern = (UChar *)apattern;
+  UChar *str = (UChar *)astr;
 
-  r = onig_new(&reg, pattern, pattern + strlen((char* )pattern),
+  r = onig_new(&reg, pattern, pattern + strlen((char *)pattern),
                ONIG_OPTION_DEFAULT, ONIG_ENCODING_ASCII, syntax, &einfo);
   if (r != ONIG_NORMAL) {
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
-    onig_error_code_to_str((UChar* )s, r, &einfo);
+    onig_error_code_to_str((UChar *)s, r, &einfo);
     fprintf(stderr, "ERROR: %s\n", s);
     return -1;
   }
 
   region = onig_region_new();
 
-  end   = str + strlen((char* )str);
+  end = str + strlen((char *)str);
   start = str;
   range = end;
   r = onig_search(reg, str, end, start, range, region, ONIG_OPTION_NONE);
@@ -37,13 +36,11 @@ extern int exec(OnigSyntaxType* syntax, char* apattern, char* astr)
     for (i = 0; i < region->num_regs; i++) {
       fprintf(stderr, "%d: (%d-%d)\n", i, region->beg[i], region->end[i]);
     }
-  }
-  else if (r == ONIG_MISMATCH) {
+  } else if (r == ONIG_MISMATCH) {
     fprintf(stderr, "search fail\n");
-  }
-  else { /* error */
+  } else { /* error */
     char s[ONIG_MAX_ERROR_MESSAGE_LEN];
-    onig_error_code_to_str((UChar* )s, r);
+    onig_error_code_to_str((UChar *)s, r);
     fprintf(stderr, "ERROR: %s\n", s);
     onig_region_free(region, 1 /* 1:free self, 0:free contents only */);
     onig_free(reg);
@@ -55,13 +52,12 @@ extern int exec(OnigSyntaxType* syntax, char* apattern, char* astr)
   return 0;
 }
 
-extern int main(int argc, char* argv[])
-{
+extern int main(int argc, char *argv[]) {
   int r;
   OnigEncoding use_encs[1];
 
   use_encs[0] = ONIG_ENCODING_ASCII;
-  onig_initialize(use_encs, sizeof(use_encs)/sizeof(use_encs[0]));
+  onig_initialize(use_encs, sizeof(use_encs) / sizeof(use_encs[0]));
 
   r = exec(ONIG_SYNTAX_PERL,
            "\\p{XDigit}\\P{XDigit}\\p{^XDigit}\\P{^XDigit}\\p{XDigit}",
