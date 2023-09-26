@@ -29,6 +29,5 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: jcbhmr/setup-cmake@main
       - run: cmake -Bbuild
       - run: cmake --build build
