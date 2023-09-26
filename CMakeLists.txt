@@ -1,6 +1,4 @@
-# https://webinstall.dev/cmake/
 cmake_minimum_required(VERSION 3.25)
-# https://oniguruma.org/oniguruma
 project(oniguruma VERSION 6.9.8)
 
 # https://cmake.org/cmake/help/latest/module/CMakePrintHelpers.html
