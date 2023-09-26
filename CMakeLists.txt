@@ -1,5 +1,6 @@
 # https://cmake.org/cmake/help/latest/
 cmake_minimum_required(VERSION 3.25)
+# Keep in sync with include/oniguruma.h
 project(oniguruma VERSION 6.9.8)
 set(CMAKE_C_STANDARD 23)
 

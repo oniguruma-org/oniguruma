@@ -1,7 +1,10 @@
 # https://www.doxygen.nl/manual/config.html
 # https://www.doxygen.nl/manual/commands.html
 
-INPUT     = $(README) src include docs
+PROJECT_NAME  = "Oniguruma"
+PROJECT_BRIEF = "🔠 The regular expression library that powered Ruby & PHP"
+
+INPUT     = $(README) include docs/$(BCP_47)
 RECURSIVE = YES
 # https://stackoverflow.com/a/13442157
 USE_MDFILE_AS_MAINPAGE = $(README)
