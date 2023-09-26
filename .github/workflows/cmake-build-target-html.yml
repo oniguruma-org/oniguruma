@@ -1,4 +1,4 @@
-name: doxygen
+name: cmake --build --target html
 on:
   push:
     branches: "main"
@@ -8,13 +8,13 @@ on:
       - src/**
       - include/**
       - docs/**
-      - .github/workflows/doxygen.yml
+      - .github/workflows/cmake-build-target-html.yml
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 jobs:
-  deploy-pages:
+  cmake-build-target-html:
     environment:
       name: github-pages
       url: ${{ steps.deploy-pages.outputs.page_url }}
@@ -32,7 +32,7 @@ jobs:
         env:
           BASE_URL: ${{ steps.configure-pages.outputs.base_url }}/
       - run: cmake -Bbuild
-      - run: cmake --build build --target html
+      - run: cmake --build build -t html
       - uses: actions/upload-pages-artifact@v2
         with:
           path: html
