@@ -1,15 +1,19 @@
 # Oniguruma
 
-<p align=center>
-  <a lang="en" href="https://oniguruma.org/oniguruma.c/en/">English</a>
-  | <a lang="ja" href="https://oniguruma.org/oniguruma.c/ja/">日本語</a>
-</p>
+<div style="margin-block: -1em 2em">
+  🔠 The regular expression library that powered Ruby & PHP
+</div>
 
-🔠 The regular expression library that powers Ruby & PHP
+<div align=center style="margin-block: 1em">
+  <img src="https://i.imgur.com/OXD1kgW.png">
+</div>
 
-<p align=center>
-  <img src="">
-</p>
+<div align=center style="margin-block: 1em">
+  <a href="https://oniguruma.org/oniguruma/">Docs website</a>
+  | <a href="https://oniguruma.org/oniguruma/en/oniguruma_8h.html">oniguruma.h API</a>
+  | <a href="https://github.com/oniguruma/oniguruma#readme">GitHub</a>
+  | <a href="https://github.com/oniguruma">More Oniguruma projects</a>
+</div>
 
 <!-- prettier-ignore -->
 💎 Used as the regex engine in [Ruby] 2<br>
@@ -20,6 +24,12 @@
 📦 Installable via [Vcpkg] package manager
 
 ## Installation
+
+![Conan](https://img.shields.io/static/v1?style=for-the-badge&message=Conan&color=6699CB&logo=Conan&logoColor=FFFFFF&label=)
+![Vcpkg](https://img.shields.io/static/v1?style=for-the-badge&message=Vcpkg&color=5C2D91&logo=Visual+Studio&logoColor=FFFFFF&label=)
+![APT](https://img.shields.io/static/v1?style=for-the-badge&message=APT&color=A81D33&logo=Debian&logoColor=FFFFFF&label=)
+![pacman](https://img.shields.io/static/v1?style=for-the-badge&message=pacman&color=1793D1&logo=Arch+Linux&logoColor=FFFFFF&label=)
+![CMake](https://img.shields.io/static/v1?style=for-the-badge&message=CMake&color=064F8C&logo=CMake&logoColor=FFFFFF&label=)
 
 You can install this library using [Conan] or [Vcpkg] like this:
 
@@ -34,8 +44,8 @@ vcpkg install oniguruma
 ```
 
 ℹ The `oniguruma` Vcpkg port in is maintained by Microsoft community
-contributors. If any issues arise specific to Vcpkg, please direct them to [the
-microsoft/vcpkg project].
+contributors. If any issues arise specific to Vcpkg, please direct them to the
+[microsoft/vcpkg] project.
 
 <details><summary>This library is also available through a number of system package managers</summary>
 
@@ -215,3 +225,4 @@ cmake --build build --target test
 [download cmake]: https://cmake.org/download/
 [cmake.org]: https://cmake.org/
 [webinstall.dev/cmake]: https://webinstall.dev/cmake
+[microsoft/vcpkg]: https://github.com/microsoft/vcpkg
