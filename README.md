@@ -1,9 +1,14 @@
-# libonig # {#mainpage}
+# Oniguruma # {#mainpage}
+
+<p align=center>
+  <a lang="en" href="https://oniguruma.org/libonig/en/">English</a>
+  | <a lang="ja" href="https://oniguruma.org/libonig/ja/">日本語</a>
+</p>
 
 🔠 The regular expression library that powers Ruby & PHP
 
 <p align=center>
-
+  <img src="">
 </p>
 
 <!-- prettier-ignore -->

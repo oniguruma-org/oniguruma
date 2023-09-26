@@ -1,7 +1,9 @@
 # CMake out-of-source build folder
 build
+
 # Doxygen HTML output
-html
+html/en
+html/ja
 
 #region https://github.com/github/gitignore/blob/main/CMake.gitignore
 CMakeLists.txt.user

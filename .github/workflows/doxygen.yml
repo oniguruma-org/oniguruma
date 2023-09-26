@@ -28,9 +28,11 @@ jobs:
       - run: npm ci
       - id: configure-pages
         uses: actions/configure-pages@v3
-      - run: doxygen
+      - run: echo "BASE_URL=$BASE_URL" >> "$GITHUB_ENV"
         env:
           BASE_URL: ${{ steps.configure-pages.outputs.base_url }}/
+      - run: doxygen
+      - run: doxygen ja.Doxyfile
       - uses: actions/upload-pages-artifact@v2
         with:
           path: html

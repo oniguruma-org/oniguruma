@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="robots" content="noindex" />
+    <link rel="alternate" href="en/" hreflang="en" />
+    <link rel="alternate" href="ja/" hreflang="ja" />
+
+    <meta name="color-scheme" content="dark light" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script>
+      if (/^ja($|-)/.test(navigator.language)) {
+        stop();
+        location.replace("ja/");
+      } else {
+        stop();
+        location.replace("en/");
+      }
+    </script>
+  </head>
+  <body>
+    <ul>
+      <li><a lang="en" href="en/">English</a></li>
+      <li><a lang="ja" href="ja/">日本語</a></li>
+    </ul>
+  </body>
+</html>
