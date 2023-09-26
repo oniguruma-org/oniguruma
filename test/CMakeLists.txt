@@ -29,8 +29,8 @@ if(NOT MSVC)
   # EUC
   add_executable(testc testc.c)
   target_link_libraries(testc onig)
-  if (CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
-	target_compile_options(testc PRIVATE -Wall -Wno-invalid-source-encoding)
+  if(CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
+    target_compile_options(testc PRIVATE -Wall -Wno-invalid-source-encoding)
   endif()
 endif(NOT MSVC)
 

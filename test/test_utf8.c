@@ -1751,8 +1751,9 @@ extern int main(int argc, char *argv[]) {
   x2("\\A.*\\s", "\n", 0, 1); //  \s
   x2("\\A.{0,99}\\s", "\n", 0, 1);
 
-  n("a(b|)+d", "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcd"); /* https://www.haijin-boys.com/discussions/5079
-                                                      */
+  n("a(b|)+d",
+    "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbcd"); /* https://www.haijin-boys.com/discussions/5079
+                                           */
   n("   \xfd", ""); /* https://bugs.php.net/bug.php?id=77370 */
   /* can't use \xfc00.. because compiler error: hex escape sequence out of range
    */
