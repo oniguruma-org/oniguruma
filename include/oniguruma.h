@@ -1,32 +1,10 @@
 #ifndef ONIGURUMA_H
 #define ONIGURUMA_H
-/**********************************************************************
-  oniguruma.h - Oniguruma (regular expression library)
-**********************************************************************/
-/*-
- * Copyright (c) 2002-2022  K.Kosako
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
+/**
+ * @file
+ * https://oniguruma.org/oniguruma.c/
+ * Copyright (c) 2002-2021, K.Kosako <kkosako0@gmail.com>
+ * BSD 2-Clause License
  */
 
 #ifdef __cplusplus
@@ -36,8 +14,9 @@ extern "C" {
 #define ONIGURUMA
 #define ONIGURUMA_VERSION_MAJOR 6
 #define ONIGURUMA_VERSION_MINOR 9
+/** \deprecated Use ONIGURUMA_VERSION_PATCH */
 #define ONIGURUMA_VERSION_TEENY 8
-
+#define ONIGURUMA_VERSION_PATCH 8
 #define ONIGURUMA_VERSION_INT 60908
 
 #ifndef P_
@@ -77,12 +56,17 @@ extern "C" {
 /* PART: character encoding */
 
 #ifndef ONIG_ESCAPE_UCHAR_COLLISION
+/** \deprecated Use the `unsigned char` type directly */
 #define UChar OnigUChar
 #endif
 
+/** \deprecated Use the `unsigned int` type directly */
 typedef unsigned int OnigCodePoint;
+/** \deprecated Use the `unsigned char` type directly */
 typedef unsigned char OnigUChar;
+/** \deprecated Use the `unsigned int` type directly */
 typedef unsigned int OnigCtype;
+/** \deprecated Use the `unsigned int` type directly */
 typedef unsigned int OnigLen;
 
 #define ONIG_INFINITE_DISTANCE ~((OnigLen)0)
@@ -519,8 +503,9 @@ ONIG_EXTERN OnigSyntaxType *OnigDefaultSyntax;
 #define ONIG_SYN_OP2_ESC_V_VTAB (1U << 13)                /* \v as VTAB */
 #define ONIG_SYN_OP2_ESC_U_HEX4 (1U << 14)                /* \uHHHH */
 #define ONIG_SYN_OP2_ESC_GNU_BUF_ANCHOR (1U << 15)        /* \`, \' */
-#define ONIG_SYN_OP2_ESC_P_BRACE_CHAR_PROPERTY (1U << 16) /* \p{...}, \P{...}  \
-                                                           */
+#define ONIG_SYN_OP2_ESC_P_BRACE_CHAR_PROPERTY                                 \
+  (1U << 16) /* \p{...}, \P{...}                                               \
+              */
 #define ONIG_SYN_OP2_ESC_P_BRACE_CIRCUMFLEX_NOT                                \
   (1U << 17) /* \p{^..}, \P{^..} */
 /* #define ONIG_SYN_OP2_CHAR_PROPERTY_PREFIX_IS (1U<<18) */
@@ -558,12 +543,13 @@ ONIG_EXTERN OnigSyntaxType *OnigDefaultSyntax;
 #define ONIG_SYN_CAPTURE_ONLY_NAMED_GROUP (1U << 7)        /* see doc/RE */
 #define ONIG_SYN_ALLOW_MULTIPLEX_DEFINITION_NAME (1U << 8) /* (?<x>)(?<x>) */
 #define ONIG_SYN_FIXED_INTERVAL_IS_GREEDY_ONLY (1U << 9)   /* a{n}?=(?:a{n})? */
-#define ONIG_SYN_ISOLATED_OPTION_CONTINUE_BRANCH (1U << 10) /* ..(?i)...|...   \
-                                                             */
-#define ONIG_SYN_VARIABLE_LEN_LOOK_BEHIND (1U << 11)        /* (?<=a+|..) */
-#define ONIG_SYN_PYTHON (1U << 12)                          /* \UHHHHHHHH */
-#define ONIG_SYN_WHOLE_OPTIONS (1U << 13)                   /* (?Ie) */
-#define ONIG_SYN_BRE_ANCHOR_AT_EDGE_OF_SUBEXP (1U << 14)    /* \(^abc$\) */
+#define ONIG_SYN_ISOLATED_OPTION_CONTINUE_BRANCH                               \
+  (1U << 10)                                             /* ..(?i)...|...      \
+                                                          */
+#define ONIG_SYN_VARIABLE_LEN_LOOK_BEHIND (1U << 11)     /* (?<=a+|..) */
+#define ONIG_SYN_PYTHON (1U << 12)                       /* \UHHHHHHHH */
+#define ONIG_SYN_WHOLE_OPTIONS (1U << 13)                /* (?Ie) */
+#define ONIG_SYN_BRE_ANCHOR_AT_EDGE_OF_SUBEXP (1U << 14) /* \(^abc$\) */
 
 /* syntax (behavior) in char class [...] */
 #define ONIG_SYN_NOT_NEWLINE_IN_NEGATIVE_CC (1U << 20) /* [^...] */
@@ -828,11 +814,28 @@ typedef struct OnigMatchParamStruct OnigMatchParam;
 
 /* Oniguruma Native API */
 
+/**
+ * Initialize library.
+ *
+ * You have to call it explicitly.
+ *
+ * onig_init() is deprecated.
+ *
+ * arguments
+ * 1 use_encodings:         array of encodings used in application.
+ * 2 num_encodings:         number of encodings.
+ *
+ * return value
+ * normal: ONIG_NORMAL == 0
+ * error:  error code < 0
+ */
 ONIG_EXTERN
-int onig_initialize P_((OnigEncoding encodings[], int number_of_encodings));
-/* onig_init(): deprecated function. Use onig_initialize(). */
+int onig_initialize(OnigEncoding encodings[], int number_of_encodings);
+
+/** \deprecated Use `onig_initialize()` instead */
 ONIG_EXTERN
-int onig_init P_((void));
+int onig_init();
+
 ONIG_EXTERN
 int ONIG_VARIADIC_FUNC_ATTR onig_error_code_to_str PV_((OnigUChar * s,
                                                         int err_code, ...));
