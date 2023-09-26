@@ -1,4 +1,4 @@
-Oniguruma Regular Expressions Version 6.9.9    2023/03/27
+# Regular expression syntax
 
 syntax: ONIG_SYNTAX_ONIGURUMA (default syntax)
 
