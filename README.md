@@ -1,14 +1,14 @@
 # Oniguruma
 
-<div style="margin-block: -1em 2em">
+<div style="margin-block: -1em 2em"><p>
   🔠 The regular expression library that powered Ruby & PHP
 </div>
 
-<div align=center style="margin-block: 1em">
+<div align=center style="margin-block: 1em"><p>
   <img src="https://i.imgur.com/OXD1kgW.png">
 </div>
 
-<div align=center style="margin-block: 1em">
+<div align=center style="margin-block: 1em"><p>
   <a href="https://oniguruma.org/oniguruma/">Docs website</a>
   | <a href="https://oniguruma.org/oniguruma/en/oniguruma_8h.html">oniguruma.h API</a>
   | <a href="https://github.com/oniguruma/oniguruma#readme">GitHub</a>
